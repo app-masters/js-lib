@@ -1,0 +1,23 @@
+{
+  "name": "jslib",
+  "version": "1.0.0",
+  "description": "JS lib",
+  "main": "index.js",
+  "scripts": {
+    "test": "null"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/app-masters/js-lib.git"
+  },
+  "keywords": [
+    "Js",
+    "lib"
+  ],
+  "author": "AppMasters",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/app-masters/js-lib/issues"
+  },
+  "homepage": "https://github.com/app-masters/js-lib#readme"
+}
