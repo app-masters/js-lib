@@ -1,10 +1,8 @@
 import FlexStorage from './dependencies/flexStorage';
 
-var amStorage;
-
 class AMStorage {
     constructor (storageBackend) {
-        amStorage = new FlexStorage({
+        this.amStorage = new FlexStorage({
             // maximum capacity, default 1000
             size: 10000,
 
@@ -28,16 +26,16 @@ class AMStorage {
     }
 
     save (params) {
-        return amStorage.save(params);
+        return this.amStorage.save(params);
     }
 
     load (params) {
-        return amStorage.load(params);
+        return this.amStorage.load(params);
     }
 
     getItem (key) {
         return new Promise((fulfill, reject) => {
-            amStorage.load({key: key}).then(data => {
+            this.amStorage.load({key: key}).then(data => {
                 fulfill(data);
             }).catch((error) => {
                 if (error.name === 'NotFoundError') {
@@ -54,7 +52,7 @@ class AMStorage {
         // Now I know
         return new Promise((fulfill, reject) => {
             // console.log(key,value);
-            amStorage.save({key: key, data: value}).then(data => {
+            this.amStorage.save({key: key, data: value}).then(data => {
                 // console.log("shit!",data);
                 fulfill(value);
             });
@@ -75,7 +73,7 @@ class AMStorage {
     removeItem (key) {
         return new Promise((fulfill, reject) => {
             // console.log(key,value);
-            amStorage.removeItem(key).then(data => {
+            this.amStorage.removeItem(key).then(data => {
                 console.log('removeItem', data);
                 fulfill(data);
             });
@@ -83,7 +81,7 @@ class AMStorage {
     }
 
     clear () {
-        return amStorage.clear();
+        return this.amStorage.clear();
     }
 }
 
