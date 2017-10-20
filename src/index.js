@@ -4,6 +4,6 @@ import JSError from './jsError';
 import DateTime from './dateTime';
 import VersionCheck from './version';
 import Text from './text';
-import Storage from './storage';
+import AMStorage from './storage';
 
-export {Http, Rollbar, JSError, DateTime, Text, VersionCheck, Storage};
+export {Http, Rollbar, JSError, DateTime, Text, VersionCheck, AMStorage};
