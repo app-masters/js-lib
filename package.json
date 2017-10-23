@@ -32,8 +32,11 @@
         "babel-preset-env": "^1.6.1",
         "webpack": "^3.8.1"
     },
-    "bundleDependencies": ["moment"],
+    "bundleDependencies": [
+        "moment"
+    ],
     "dependencies": {
+        "axios": "^0.17.0",
         "moment": "^2.19.1"
     }
 }
