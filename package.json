@@ -2,7 +2,7 @@
     "name": "jslib",
     "version": "1.0.0",
     "description": "JS lib",
-    "main": "dist/index",
+    "main": "./dist/index.js",
     "scripts": {
         "test": "null",
         "build": "rm -rf dist/ && webpack -p"
@@ -32,6 +32,8 @@
         "babel-preset-env": "^1.6.1",
         "webpack": "^3.8.1"
     },
+    "bundleDependencies": ["moment"],
+    ""
     "dependencies": {
         "moment": "^2.19.1"
     }
