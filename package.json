@@ -33,7 +33,6 @@
         "webpack": "^3.8.1"
     },
     "bundleDependencies": ["moment"],
-    ""
     "dependencies": {
         "moment": "^2.19.1"
     }
