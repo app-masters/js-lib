@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "description": "JS lib",
     "scripts": {
-        "test": "null"
+        "test": "null",
+        "build": "rm -rf dist/ && babel src/ -d dist/",
+        "postinstall": "npm run build"
     },
     "repository": {
         "type": "git",
@@ -13,6 +15,7 @@
         "Js",
         "lib"
     ],
+    "main": "dist/index.js",
     "author": "AppMasters",
     "license": "ISC",
     "bugs": {
