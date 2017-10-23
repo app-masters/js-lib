@@ -2,10 +2,9 @@
     "name": "jslib",
     "version": "1.0.0",
     "description": "JS lib",
-    "main": "./dist/index.js",
+    "main": "./index.js",
     "scripts": {
-        "test": "null",
-        "build": "rm -rf dist/ && webpack -p"
+        "test": "null"
     },
     "repository": {
         "type": "git",
