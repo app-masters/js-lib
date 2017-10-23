@@ -1,9 +1,9 @@
-import Http from '../http';
-import Rollbar from '../rollbar';
-import JSError from '../jsError';
-import DateTime from '../dateTime';
-import VersionCheck from '../version';
-import Text from '../text';
-import AMStorage from '../storage';
+import Http from './src/http';
+import Rollbar from './src/rollbar';
+import JSError from './src/jsError';
+import DateTime from './src/dateTime';
+import VersionCheck from './src/version';
+import Text from './src/text';
+import AMStorage from './src/storage';
 
 export {Http, Rollbar, JSError, DateTime, Text, VersionCheck, AMStorage};
