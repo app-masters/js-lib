@@ -36,7 +36,6 @@
         "moment"
     ],
     "dependencies": {
-        "axios": "^0.17.0",
         "moment": "^2.19.1"
     }
 }

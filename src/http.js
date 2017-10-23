@@ -1,5 +1,4 @@
 import Rollbar from './rollbar';
-import axios from 'axios';
 var headers = '';
 var baseURL = '';
 var params = {};
@@ -40,107 +39,107 @@ class Http {
     static post (uri, body) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
-            console.log(url + ' - POST - body ', body);
+                console.log(url + ' - POST - body ', body);
                 // console.log(headers);
-            body = JSON.stringify(body);
-            axios(url, {
-                method: 'POST',
-                headers: headers,
-                body: body
-            }).then(Http.checkStatus)
+                body = JSON.stringify(body);
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: body
+                }).then(Http.checkStatus)
                     .then(Http.checkListener)
                     .then(Http.parseJSON)
                     .then(response => {
                         console.log('POST > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                        if (error.message !== 'Network request failed') {
-                            console.error('POST > ' + url + ' > error', error);
-                        } else {
-                            console.warn('POST > Network request failed -  Are you offline?');
-                        }
-                        reject(error);
-                    });
-        }
+                    if (error.message !== 'Network request failed') {
+                        console.error('POST > ' + url + ' > error', error);
+                    } else {
+                        console.warn('POST > Network request failed -  Are you offline?');
+                    }
+                    reject(error);
+                });
+            }
         );
     }
 
     static put (uri, body) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
-            console.log(url + ' - PUT - body ', body);
+                console.log(url + ' - PUT - body ', body);
                 // console.log(headers);
-            body = JSON.stringify(body);
-            axios(url, {
-                method: 'PUT',
-                headers: headers,
-                body: body
-            }).then(Http.checkStatus)
+                body = JSON.stringify(body);
+                fetch(url, {
+                    method: 'PUT',
+                    headers: headers,
+                    body: body
+                }).then(Http.checkStatus)
                     .then(Http.checkListener)
                     .then(Http.parseJSON)
                     .then(response => {
                         console.log('PUT > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                        if (error.message !== 'Network request failed') {
-                            console.error('PUT > ' + url + ' > error', error);
-                        } else {
-                            console.warn('PUT > Network request failed -  Are you offline?');
-                        }
-                        reject(error);
-                    });
-        }
+                    if (error.message !== 'Network request failed') {
+                        console.error('PUT > ' + url + ' > error', error);
+                    } else {
+                        console.warn('PUT > Network request failed -  Are you offline?');
+                    }
+                    reject(error);
+                });
+            }
         );
     }
 
     static get (uri) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
-            console.log(url + ' - GET');
-            axios(url, {
-                method: 'GET',
-                headers: headers
-            }).then(Http.checkListener)
+                console.log(url + ' - GET');
+                fetch(url, {
+                    method: 'GET',
+                    headers: headers
+                }).then(Http.checkListener)
                     .then(Http.checkStatus)
                     .then(Http.parseJSON)
                     .then(response => {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                        if (error.message !== 'Network request failed') {
-                            console.error('GET > ' + url + ' > error', error);
-                        } else {
-                            console.warn('GET > Network request failed -  Are you offline?');
-                        }
-                        reject(error);
-                    });
-        }
+                    if (error.message !== 'Network request failed') {
+                        console.error('GET > ' + url + ' > error', error);
+                    } else {
+                        console.warn('GET > Network request failed -  Are you offline?');
+                    }
+                    reject(error);
+                });
+            }
         );
     }
 
     static delete (uri, body) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
-            console.log(url + ' - DELETE');
+                console.log(url + ' - DELETE');
                 // console.log(headers);
-            axios(url, {
-                method: 'DELETE',
-                headers: headers,
-                body: body
-            }).then(Http.checkListener)
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: headers,
+                    body: body
+                }).then(Http.checkListener)
                     .then(Http.checkDeleteStatus)
                     .then(response => {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                        if (error.message !== 'Network request failed') {
-                            console.error('DELETE > ' + url + ' > error', error);
-                        } else {
-                            console.warn('DELETE > Network request failed -  Are you offline?');
-                        }
-                        reject(error);
-                    });
-        }
+                    if (error.message !== 'Network request failed') {
+                        console.error('DELETE > ' + url + ' > error', error);
+                    } else {
+                        console.warn('DELETE > Network request failed -  Are you offline?');
+                    }
+                    reject(error);
+                });
+            }
         );
     }
 
