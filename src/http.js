@@ -1,5 +1,4 @@
 import Rollbar from './rollbar';
-var headers = '';
 var baseURL = '';
 var params = {};
 var requestListener = null;
@@ -10,7 +9,7 @@ class Http {
     }
 
     static setHeaders (headersSetup) {
-        headers = headersSetup;
+        Http.headers = headersSetup;
     }
 
     static setEndpointParam (key, value) {
@@ -18,7 +17,7 @@ class Http {
     }
 
     static getHeaders () {
-        return headers;
+        return Http.headers;
     }
 
     static getUrl (uri) {
@@ -44,7 +43,7 @@ class Http {
                 body = JSON.stringify(body);
                 fetch(url, {
                     method: 'POST',
-                    headers: headers,
+                    headers: Http.headers,
                     body: body
                 }).then(Http.checkStatus)
                     .then(Http.checkListener)
@@ -72,7 +71,7 @@ class Http {
                 body = JSON.stringify(body);
                 fetch(url, {
                     method: 'PUT',
-                    headers: headers,
+                    headers: Http.headers,
                     body: body
                 }).then(Http.checkStatus)
                     .then(Http.checkListener)
@@ -98,7 +97,7 @@ class Http {
                 console.log(url + ' - GET');
                 fetch(url, {
                     method: 'GET',
-                    headers: headers
+                    headers: Http.headers
                 }).then(Http.checkListener)
                     .then(Http.checkStatus)
                     .then(Http.parseJSON)
@@ -124,7 +123,7 @@ class Http {
                 // console.log(headers);
                 fetch(url, {
                     method: 'DELETE',
-                    headers: headers,
+                    headers: Http.headers,
                     body: body
                 }).then(Http.checkListener)
                     .then(Http.checkDeleteStatus)
@@ -199,5 +198,6 @@ class Http {
         requestListener = callback;
     }
 }
+Http.headers = '';
 
 export default Http;
