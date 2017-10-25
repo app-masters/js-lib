@@ -1,11 +1,9 @@
 import Rollbar from './rollbar';
-var baseURL = '';
-var params = {};
-var requestListener = null;
+
 
 class Http {
     static setBaseURL (baseURLSetup) {
-        baseURL = baseURLSetup;
+        Http.baseURL = baseURLSetup;
     }
 
     static setHeaders (headersSetup) {
@@ -13,7 +11,7 @@ class Http {
     }
 
     static setEndpointParam (key, value) {
-        params[key] = value;
+        Http.params[key] = value;
     }
 
     static getHeaders () {
@@ -21,13 +19,13 @@ class Http {
     }
 
     static getUrl (uri) {
-        let url = baseURL + uri;
+        let url = Http.baseURL + uri;
         const regex = /{.*}/i;
         let matches = url.match(regex);
         if (matches) {
             // console.log('MATCHES: ', matches);
             matches.map((match) => {
-                let value = params[match];
+                let value = Http.params[match];
                 url = url.replace(match, value);
             });
         }
@@ -164,8 +162,8 @@ class Http {
 
     static checkListener (response) {
         // console.log("checkListener",requestListener);
-        if (requestListener) {
-            requestListener(response);
+        if (Http.requestListener) {
+            Http.requestListener(response);
         }
         return response;
     }
@@ -195,9 +193,12 @@ class Http {
     }
 
     static setRequestListener (callback) {
-        requestListener = callback;
+        Http.requestListener = callback;
     }
 }
 Http.headers = '';
+Http.baseURL = '';
+Http.params = {};
+Http.requestListener = null;
 
 export default Http;
