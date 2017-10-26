@@ -1,5 +1,5 @@
 {
-    "name": "jslib",
+    "name": "@app-masters/js-lib",
     "version": "1.0.0",
     "description": "JS lib",
     "main": "dist/index.js",
