@@ -1,7 +1,10 @@
 import Rollbar from './rollbar';
 
-
 class Http {
+    static setFetch (fetchMethod) {
+        Http.fetch = fetchMethod;
+    }
+
     static setBaseURL (baseURLSetup) {
         Http.baseURL = baseURLSetup;
     }
@@ -19,6 +22,10 @@ class Http {
     }
 
     static getUrl (uri) {
+        if (!Http.fetch) {
+            throw new Error('This environment don\'t have the window.fetch. ' +
+                'Please set a custom fetch method using Http.setFetch().');
+        }
         let url = Http.baseURL + uri;
         const regex = /{.*}/i;
         let matches = url.match(regex);
@@ -39,7 +46,7 @@ class Http {
                 console.log(url + ' - POST - body ', body);
                 // console.log(headers);
                 body = JSON.stringify(body);
-                fetch(url, {
+                Http.fetch(url, {
                     method: 'POST',
                     headers: Http.headers,
                     body: body
@@ -67,7 +74,7 @@ class Http {
                 console.log(url + ' - PUT - body ', body);
                 // console.log(headers);
                 body = JSON.stringify(body);
-                fetch(url, {
+                Http.fetch(url, {
                     method: 'PUT',
                     headers: Http.headers,
                     body: body
@@ -93,7 +100,7 @@ class Http {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
                 console.log(url + ' - GET');
-                fetch(url, {
+                Http.fetch(url, {
                     method: 'GET',
                     headers: Http.headers
                 }).then(Http.checkListener)
@@ -119,7 +126,7 @@ class Http {
         return new Promise((resolve, reject) => {
                 console.log(url + ' - DELETE');
                 // console.log(headers);
-                fetch(url, {
+                Http.fetch(url, {
                     method: 'DELETE',
                     headers: Http.headers,
                     body: body
@@ -200,5 +207,6 @@ Http.headers = '';
 Http.baseURL = '';
 Http.params = {};
 Http.requestListener = null;
+Http.fetch = ((typeof fetch) !== 'undefined') ? fetch : null;
 
 export default Http;
