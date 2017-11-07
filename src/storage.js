@@ -1,5 +1,4 @@
 import FlexStorage from './dependencies/flexStorage';
-console.log('fui carregado, so mo noob');
 class AMStorage {
     constructor (storageBackend) {
         this.amStorage = new FlexStorage({
