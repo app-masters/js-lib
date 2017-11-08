@@ -1,6 +1,6 @@
 import * as moment from "moment";
 
-import {Http, VersionCheck, Rollbar} from "../src/";
+import {Http, VersionCheck, Rollbar} from "./index";
 
 // Move to some amLib
 export default function appBootstrap(client, packag, envs, storage, callback) {
