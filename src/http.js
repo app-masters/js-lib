@@ -207,6 +207,6 @@ Http.headers = '';
 Http.baseURL = '';
 Http.params = {};
 Http.requestListener = null;
-Http.fetch = ((typeof fetch) !== 'undefined') ? fetch : null;
+Http.fetch = typeof fetch !== 'undefined' ? window.fetch.bind(window) : null;
 
 export default Http;
