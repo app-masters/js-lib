@@ -8,6 +8,9 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     // Validate parans
     if (!client || ["web", "mobile"].indexOf(client) < 0)
         throw ("Unrecognized or undefined client: " + client);
+    // @todo Validate envs
+    // @todo Validate packag
+    // @todo Validate storage
     if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion)
         throw ("You must pass callback parameter to appBoostrap, with onMinVersionNotSatifies and onNewVersion methods.");
 
@@ -70,7 +73,6 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     //         console.error(e);
     //     }
     // });
-
 
     // 7 - Mobile fixes
     if (client === "mobile") {
