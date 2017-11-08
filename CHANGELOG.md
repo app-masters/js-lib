@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.0.3] / [1.0.6] - 2017-11-8
+## [1.0.3] / [1.0.7] - 2017-11-8
 ### Changed
 - AppBostrapp fixes
 - Http changed fetch to window.fetch.bind(window) - observe it 

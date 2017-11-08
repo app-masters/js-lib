@@ -18,15 +18,19 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     let nodeEnv = process.env.NODE_ENV;
     let version = packag.version;
     let firebase = process.env.FIREBASE && process.env.FIREBASE === true;
+    let buildTime = process.env.BUILD_TIME;
     // let release = packag.release;
     // console.log("packag", packag);
-    console.log('CLIENT: ' + client + " - ENV: " + nodeEnv + " - VERSION: " + version + " - RELEASE DATE: " + process.env.APP_RELEASE + " - FIREBASE: " + firebase);
+
+    console.log('CLIENT: ' + client + " - ENV: " + nodeEnv + " - VERSION: " + version + " - RELEASE DATE: " + process.env.APP_RELEASE + " - FIREBASE: " + firebase+ " - BUILD_TIME: "+buildTime);
     // console.log(envs);
     let config;
-    if (nodeEnv === "development" && firebase === true)
+    if (nodeEnv === "development" && firebase) {
         config = envs["development_firebase"];
-    else
+        console.log("> firebase development <");
+    } else {
         config = envs[nodeEnv];
+    }
 
     console.log("Loaded config", config);
     if (config === undefined) {
