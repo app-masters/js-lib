@@ -6,7 +6,7 @@ import {Http, VersionCheck, Rollbar} from "./index";
 export default function appBootstrap(client, packag, envs, storage, callback) {
 
     // Validate parans
-    if (!client || ["web", "mobile","admin"].indexOf(client) < 0)
+    if (!client || ["web", "mobile", "admin"].indexOf(client) < 0)
         throw ("Unrecognized or undefined client: " + client);
     // @todo Validate envs
     // @todo Validate packag
@@ -22,7 +22,12 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     // console.log("packag", packag);
     console.log('CLIENT: ' + client + " - ENV: " + nodeEnv + " - VERSION: " + version + " - RELEASE DATE: " + process.env.APP_RELEASE + " - FIREBASE: " + firebase);
     // console.log(envs);
-    let config = envs[nodeEnv];
+    let config;
+    if (nodeEnv === "development" && firebase === true)
+        config = envs["development_firebase"];
+    else
+        config = envs[nodeEnv];
+
     console.log("Loaded config", config);
     if (config === undefined) {
         throw new Error("No config for NODE_ENV \"" + nodeEnv + "\"");
