@@ -6,14 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.8] - 2017-11-9
+### Changed
+- AppBootstrap() changed to AppBootstrap.setup()
+ 
 ## [1.0.3] / [1.0.7] - 2017-11-8
 ### Changed
-- AppBostrapp fixes
+- AppBootstrap fixes
 - Http changed fetch to window.fetch.bind(window) - observe it 
  
 ## [1.0.2] - 2017-11-7
 ### Added
-- AppBostrapp included (src and test)
+- AppBootstrap included (src and test)
 
 ## [1.0.1] - 2017-10-31
 ### Added

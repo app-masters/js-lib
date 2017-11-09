@@ -2,8 +2,10 @@ import * as moment from "moment";
 
 import {Http, VersionCheck, Rollbar} from "./index";
 
+var callbacks = {};
+
 // Move to some amLib
-export default function appBootstrap(client, packag, envs, storage, callback) {
+function setup(client, packag, envs, storage, callback) {
 
     // Validate parans
     if (!client || ["web", "mobile", "admin"].indexOf(client) < 0)
@@ -11,8 +13,9 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     // @todo Validate envs
     // @todo Validate packag
     // @todo Validate storage
-    if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion)
-        throw ("You must pass callback parameter to appBoostrap, with onMinVersionNotSatifies and onNewVersion methods.");
+    if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion || !callback.onUncaughtError)
+        throw ("You must pass callback parameter to AppBootstrap.setup, with onMinVersionNotSatifies, onNewVersion and onUncaughtError methods.");
+    callbacks = callback;
 
     // 1 - Decide env
     let nodeEnv = process.env.NODE_ENV;
@@ -38,8 +41,8 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     }
 
     // 2 - Rollbar / bugsnag
-    if (config.rollbar) {
-        Rollbar.setup(config.rollbar.accessToken, client + "_" + nodeEnv, process.env.APP_VERSION);
+    if (config.rollbarToken) {
+        Rollbar.setup(config.rollbarToken, client + "_" + nodeEnv, process.env.APP_VERSION);
     } else if (config.bugsnag) {
         bugsnagConfig(__DEV__);
     } else {
@@ -48,17 +51,6 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
 
     // 3 - Http
     Http.setBaseURL(config.baseUrl);
-    // if (process.env.NODE_ENV === "development") {
-    //     Http.setBaseURL('https://willim-dev.herokuapp.com/api');
-    // } else if (process.env.NODE_ENV === "development") {
-    //     Http.setBaseURL('http://localhost:3000/api');
-    // } else if (process.env.NODE_ENV === "staging") {
-    //     Http.setBaseURL('https://willim-staging.herokuapp.com/api');
-    // } else if (process.env.NODE_ENV === "production") {
-    //     Http.setBaseURL('https://willim-prod.herokuapp.com/api');
-    // } else {
-    //     throw new Error("Unable to detect env. NODE_ENV: " + process.env.NODE_ENV);
-    // }
     Http.setHeaders({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -106,3 +98,11 @@ export default function appBootstrap(client, packag, envs, storage, callback) {
     return true;
 
 }
+
+const AppBootstrap = {
+    setup: setup,
+    onUncaughtError: callbacks.onUncaughtError,
+    onMinVersionNotSatifies: callbacks.onMinVersionNotSatifies,
+    onNewVersion: callbacks.onNewVersion
+};
+export default AppBootstrap;

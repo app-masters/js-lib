@@ -9,12 +9,12 @@ class DateTime {
      */
     static secondsToHour (seconds, round) {
         if (!seconds) return null;
-        console.log("seconds", seconds);
+        // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
         let formatted = duration.asHours();
         // if (round)
         formatted = Math.round(formatted) + " horas";
-        console.log("formatted", formatted);
+        // console.log("formatted", formatted);
         return formatted;
     }
 

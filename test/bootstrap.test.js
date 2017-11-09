@@ -1,4 +1,4 @@
-import AppBootstrap from '../src/appBootstrap';
+import {AppBootstrap} from '../src';
 import packag from './testPackage.json';
 import envs from './testConfig.js';
 import AMStorage from '../src/storage';
@@ -20,9 +20,12 @@ test('Bootstrap some app', () => {
                 // Limpar storage de items
                 // Apagar dado de autenticação e avisar ao usuário que o beta acabou (ter if)
             }
+        },
+        onUncaughtError: (e) => {
+            alert("Houve um erro inesperado e os programadores responsáveis já foram avisados. \n\n Detalhes técnicos: " + e.message);
         }
     };
 
-    let result = AppBootstrap("web", packag, envs, storage, callcabks);
+    let result = AppBootstrap.setup("web", packag, envs, storage, callcabks);
     expect(result).toBe(true);
 });
