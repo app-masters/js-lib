@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.11] - 2017-11-14
+### Changed
+- AppBoostrap build time on console
+
 ## [1.0.9] / [1.0.10] - 2017-11-14
 ### Added
 - Object Handler for javascript objects methods
+
 ### Changed
 - Fixes in export
 
