@@ -51,7 +51,7 @@ class App extends Component {
     constructor () {
         super();
         try {
-            let callcabks = {
+            let callbacks = {
                 onMinVersionNotSatifies: (version) => {
                     alert("Você deve atualizar sua versão agora! Por favor recarregue a página, se a mensagem continuar, limpe o cache do navegador.");
                 },
@@ -62,12 +62,17 @@ class App extends Component {
                     }
                 },
                 onUncaughtError: (e) => {
-                    alert("Houve um erro inesperado e os programadores responsáveis já foram avisados. \n\n Detalhes técnicos: " + e.message);
+                    if (e.message !== 'Failed to fetch') {
+                        Rollbar.error(e);
+                        alert("Houve um erro inesperado e os programadores responsáveis já foram avisados. \n\n Detalhes técnicos: " + e.message);
+                    } else {
+                        alert('Falha na conexāo');
+                    }
                 }
             };
 
             // Bootstrap
-            AppBootstrap.setup("web", packag, envs, storage, callcabks);
+            AppBootstrap.setup("web", packag, envs, storage, callbacks);
         } catch (e) {
             alert("Houve um erro inesperado e os programadores responsáveis já foram avisados. \n\n Detalhes técnicos: " + e.message);
         }
@@ -76,7 +81,7 @@ class App extends Component {
 
 ````
 
-
+(callbacks are the same object used with AMActions.setup()).
 
 
 

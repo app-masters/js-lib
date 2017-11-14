@@ -21,11 +21,11 @@ function setup(client, packag, envs, storage, callback) {
     let nodeEnv = process.env.NODE_ENV;
     let version = packag.version;
     let firebase = process.env.FIREBASE && process.env.FIREBASE === true;
-    let buildTime = process.env.BUILD_TIME;
-    // let release = packag.release;
-    // console.log("packag", packag);
+    var buildTime = new Date(process.env.BUILD_TIME);
+    let buildTimeString = buildTime.toDateString()+" "+buildTime.toTimeString();
 
-    console.log('CLIENT: ' + client + " - ENV: " + nodeEnv + " - VERSION: " + version + " - RELEASE DATE: " + process.env.APP_RELEASE + " - FIREBASE: " + firebase+ " - BUILD_TIME: "+buildTime);
+    console.log('CLIENT:' + client + " - ENV:" + nodeEnv + " - VERSION:" + version + " - RELEASE DATE:" + process.env.APP_RELEASE + " - FIREBASE:" + firebase + " - BUILD_TIME:" +buildTimeString);
+
     // console.log(envs);
     let config;
     if (nodeEnv === "development" && firebase) {
@@ -45,6 +45,8 @@ function setup(client, packag, envs, storage, callback) {
         Rollbar.setup(config.rollbarToken, client + "_" + nodeEnv, process.env.APP_VERSION);
     } else if (config.bugsnag) {
         bugsnagConfig(__DEV__);
+    } else if (nodeEnv === "development") {
+        console.warn("Rollbar not set on dev. It's ok.");
     } else {
         throw new Error("You must have Rollbar or bugsnag on your app.");
     }
