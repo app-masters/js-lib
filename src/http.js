@@ -26,7 +26,11 @@ class Http {
             throw new Error('This environment don\'t have the window.fetch. ' +
                 'Please set a custom fetch method using Http.setFetch().');
         }
-        let url = Http.baseURL + uri;
+        var url=null;
+        if (!uri.startsWith('http'))
+            url = Http.baseURL + uri;
+        else
+            url = uri;
         const regex = /{.*}/i;
         let matches = url.match(regex);
         if (matches) {
