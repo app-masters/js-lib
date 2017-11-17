@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.13] - 2017-11-17
+### Changed
+- AppBoostrap changed to work with mobile
+
+## [1.0.12] - 2017-11-17
+### Added
+- AppBoostrap.getConfig()
+
 ## [1.0.11] - 2017-11-14
 ### Changed
 - AppBoostrap build time on console

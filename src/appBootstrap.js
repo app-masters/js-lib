@@ -19,11 +19,17 @@ class AppBootstrap {
         // 1 - Decide env
         let nodeEnv = process.env.NODE_ENV;
         let version = packag.version;
-        let firebase = process.env.FIREBASE && process.env.FIREBASE === true;
-        var buildTime = new Date(process.env.BUILD_TIME);
-        let buildTimeString = buildTime.toDateString() + " " + buildTime.toTimeString();
-
-        console.log('CLIENT:' + client + " - ENV:" + nodeEnv + " - VERSION:" + version + " - RELEASE DATE:" + process.env.APP_RELEASE + " - FIREBASE:" + firebase + " - BUILD_TIME:" + buildTimeString);
+        let firebase;
+        let buildTime;
+        let buildTimeString;
+        if (client !== "mobile") {
+            firebase = process.env.FIREBASE && process.env.FIREBASE === true;
+            buildTime = new Date(process.env.BUILD_TIME);
+            buildTimeString = buildTime.toDateString() + " " + buildTime.toTimeString();
+            console.log('CLIENT:' + client + " - ENV:" + nodeEnv + " - VERSION:" + version + " - RELEASE DATE:" + process.env.APP_RELEASE + " - BUILD_TIME:" + buildTimeString + " - FIREBASE:" + firebase);
+        } else if (__DEV__ !== undefined) {
+            console.log('MOBILE CLIENT:' + client + " - ENV:" + nodeEnv + " - VERSION:" + version);
+        }
 
         // console.log(envs);
         let config;
@@ -80,7 +86,7 @@ class AppBootstrap {
         // 7 - Mobile fixes
         if (client === "mobile") {
             if (nodeEnv === "production") {
-                // Remove logs on PROD
+                // Remove logs on PROD (performance)
                 console.log = function () {
                 };
                 console.info = function () {
