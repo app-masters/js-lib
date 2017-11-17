@@ -4,6 +4,8 @@ import envs from './testConfig.js';
 import AMStorage from '../src/storage';
 import localStorageMock from './localStorageMock';
 
+
+
 // Fake localStorage to run test
 let storage = new AMStorage(localStorageMock);
 
@@ -28,4 +30,5 @@ test('Bootstrap some app', () => {
 
     let result = AppBootstrap.setup("web", packag, envs, storage, callcabks);
     expect(result).toBe(true);
+    // console.log("config>>>>",AppBootstrap.getConfig());
 });
