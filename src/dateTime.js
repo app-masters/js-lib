@@ -3,11 +3,108 @@ import moment from 'moment';
 moment.updateLocale('pt-br', require('moment/locale/pt-br'));
 
 class DateTime {
+
+    /**
+     * DONT USE IT!!! NEED MORE TESTS!!!
+     * Show a pretty date format
+     * @param date
+     * @param unique
+     * @returns {*}
+     */
+    static humanize(date, unique) {
+
+        if (!date)
+            return null;
+
+        let now = new Date();
+        let timeDiff = now - new Date(date);
+
+        timeDiff /= 1000;
+
+        let days = Math.floor(timeDiff / 86400);
+        let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
+        let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
+        let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
+
+        let result = '';
+        if (unique === false) {
+            result = [];
+            if (days === 1)
+                result.push("1 dia");
+            if (days > 1)
+                result.push(days + " dias");
+            if (hours > 0)
+                result.push(hours + " horas");
+            if (minutes > 0)
+                result.push(minutes + " minutos");
+            if (secs > 0)
+                result.push(secs + " segundos");
+            result = result.join(", ");
+        } else {
+            if (days === 1)
+                result = "1 dia";
+            else if (days > 1)
+                result = days + " dias";
+            else if (hours > 0)
+                result += hours + " horas";
+            else if (minutes > 0)
+                result += minutes + " minutos";
+            else if (secs > 0)
+                result += secs + " segundos";
+            else
+                result = "agora";
+        }
+        // let x = "(" + days + " Days " + hours + " Hours " + minutes + " Minutes and " + secs + " Secondes " + ")";
+
+        return result;
+    }
+
+    static relative(date, showHour, shortenMonth, defaultMask) {
+        if (!date)
+            return null;
+        date = new Date(date);
+
+        let now = new Date();
+        let timeDiff = now - date;
+
+        timeDiff /= 1000;
+
+        let days = -Math.floor(timeDiff / 86400);
+        let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
+        let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
+        let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
+        let sameYear = date.getYear() === now.getYear();
+
+        let hour = (showHour ? ' às ' + ("0"+date.getHours()).slice(-2) + ":" + ("0"+date.getMinutes()).slice(-2) : '');
+
+        // console.log("days", days);
+        // console.log("hours", hours);
+        // console.log("minutes", minutes);
+        // console.log("secs", secs);
+
+        if (days === 0) {
+            return 'Hoje' + hour;
+        } else if (days === 1) {
+            return 'Amanhã' + hour;
+        } else if (days === -1) {
+            return 'Ontem' + hour;
+        } else if (sameYear) {
+            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth()+1)).slice(-2) + hour;
+        } else if (!sameYear) {
+            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth()+1)).slice(-2) + "/" + date.getFullYear() + hour;
+        } else {
+            console.log("days", days);
+            console.log("hours", hours);
+            console.log("minutes", minutes);
+            console.log("secs", secs);
+        }
+    }
+
     /**
      * Return a formated hour "hh:mm:ss" from a seconds number
      * @param seconds
      */
-    static secondsToHour (seconds, round) {
+    static secondsToHour(seconds, round) {
         if (!seconds) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
@@ -22,7 +119,7 @@ class DateTime {
      * Return a humanize hour like "1 dia" from a seconds number
      * @param seconds
      */
-    static secondsToHumanize (seconds) {
+    static secondsToHumanize(seconds) {
         if (!seconds) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
@@ -31,19 +128,19 @@ class DateTime {
         return formatted;
     }
 
-    static formatHour (value) {
+    static formatHour(value) {
         return moment(value).format('hh:mm');
         // return hora;
     }
 
-    static _addZero (i) {
+    static _addZero(i) {
         if (i < 10) {
             i = "0" + i;
         }
         return i;
     }
 
-    static formatDateTime (date, space) {
+    static formatDateTime(date, space) {
         if (!date) return null;
         let result = '';
         result = DateTime.TSToDate(date) + space + DateTime.formatHour(date);
@@ -52,7 +149,7 @@ class DateTime {
     }
 
 // Função que recebe data DD-MM-YYYY e devolve YYYY-MM-DD
-    static DateToISO (dateStr) {
+    static DateToISO(dateStr) {
         if (dateStr !== '') {
             return dateStr.split('/').reverse().join('/');
         } else {
@@ -61,7 +158,7 @@ class DateTime {
     }
 
 // Função que recebe data DD-MM-YYYY e devolve UNIX TimeStamp
-    static DateToTS (dateStr) {
+    static DateToTS(dateStr) {
         if (dateStr !== '') {
             const ISODate = DateTime.DateToISO(dateStr);
             const TSDate = (new Date(ISODate));
@@ -73,7 +170,7 @@ class DateTime {
     }
 
 // Função que recebe UNIX TimeStamp e devolve data DD-MM-YYYY
-    static TSToDate (TSValue) {
+    static TSToDate(TSValue) {
         if (TSValue !== '') {
             const fullDate = (new Date(TSValue));
             return (
@@ -87,7 +184,7 @@ class DateTime {
     }
 
 // Função que recebe frequencia e converte para intervalo de TimeStamp
-    static freqToTS (freqValue, daily) {
+    static freqToTS(freqValue, daily) {
         if (daily) {
             return freqValue * 3600; // 60 minutos * 60 segundos
         } else {
@@ -96,7 +193,7 @@ class DateTime {
     }
 
 // Função que recebe data HH:MM e devolve UNIX TimeStamp
-    static TimeToTS (TimeStr) {
+    static TimeToTS(TimeStr) {
         if (TimeStr !== '') {
             const timeVec = TimeStr.split(':');
             return (timeVec[0] * 3600 + timeVec[1] * 60);
@@ -105,7 +202,7 @@ class DateTime {
         }
     }
 
-    static TSToTime (TSValue) {
+    static TSToTime(TSValue) {
         if (TSValue !== '') {
             let minutes = Math.floor((TSValue % 3600) / 60);
             let hours = Math.floor(TSValue / 3600);
@@ -117,7 +214,7 @@ class DateTime {
         }
     }
 
-    static RelativeDate (TimeStr) {
+    static RelativeDate(TimeStr) {
         const dueDate = moment(TimeStr, 'DD-MM-YYYY');
         if (dueDate.diff(moment(), 'days') <= 6) {
             const date = dueDate.calendar().split(' às')[0];
@@ -127,7 +224,7 @@ class DateTime {
         }
     }
 
-    static TSToFreqString (TimeStr) {
+    static TSToFreqString(TimeStr) {
         if (TimeStr <= 86400) {
             return 'Diário';
         } else if (TimeStr === 604800) {

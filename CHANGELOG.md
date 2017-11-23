@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.14] - 2017-11-23
+### Added
+- relative and humanize added to DateTime
+
 ## [1.0.13] - 2017-11-17
 ### Changed
 - AppBoostrap changed to work with mobile
