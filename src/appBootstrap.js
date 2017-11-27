@@ -47,10 +47,11 @@ class AppBootstrap {
         AppBootstrap.config = config;
 
         // 2 - Rollbar / bugsnag
-        if (config.rollbarToken) {
+        if (config.rollbarToken && client !== 'mobile') {
             Rollbar.setup(config.rollbarToken, client + "_" + nodeEnv, process.env.APP_VERSION);
-        } else if (config.bugsnag) {
-            bugsnagConfig(__DEV__);
+        } else if (client === 'mobile') {
+            // Config of rollbar for native
+            console.log('AppBootstrap is not configuring the Rollbar, please check if other source is configuring it.');
         } else if (nodeEnv === "development") {
             console.warn("Rollbar not set on dev. It's ok.");
         } else {
