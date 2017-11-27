@@ -75,7 +75,7 @@ class DateTime {
         let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
         let sameYear = date.getYear() === now.getYear();
 
-        let hour = (showHour ? ' às ' + ("0"+date.getHours()).slice(-2) + ":" + ("0"+date.getMinutes()).slice(-2) : '');
+        let hour = (showHour ? ' às ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) : '');
 
         // console.log("days", days);
         // console.log("hours", hours);
@@ -89,9 +89,9 @@ class DateTime {
         } else if (days === -1) {
             return 'Ontem' + hour;
         } else if (sameYear) {
-            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth()+1)).slice(-2) + hour;
+            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + hour;
         } else if (!sameYear) {
-            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth()+1)).slice(-2) + "/" + date.getFullYear() + hour;
+            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() + hour;
         } else {
             console.log("days", days);
             console.log("hours", hours);
@@ -108,11 +108,11 @@ class DateTime {
         if (!seconds) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
-        let formatted = duration.asHours();
-        // if (round)
-        formatted = Math.round(formatted) + " horas";
-        // console.log("formatted", formatted);
-        return formatted;
+        round = false;
+        if (round)
+            return Math.round(duration.asHours()) + " horas";
+        else
+            return Math.floor(duration.asHours()) + ":" + ("0" + duration.minutes()).slice(-2);
     }
 
     /**
