@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.15] - 2017-11-27
+### Changed
+- AppBoostrap don't handle the rollbar in mobile
+
 ## [1.0.14] - 2017-11-23
 ### Added
 - relative and humanize added to DateTime
