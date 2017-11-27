@@ -110,7 +110,7 @@ class DateTime {
         let duration = moment.duration(seconds, 'seconds');
         round = false;
         if (round)
-            return Math.round(duration.asHours()) + " horas";
+            return Math.round(duration.asHours()) + " hs";
         else
             return Math.floor(duration.asHours()) + ":" + ("0" + duration.minutes()).slice(-2);
     }
