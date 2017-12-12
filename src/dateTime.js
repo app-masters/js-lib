@@ -64,7 +64,7 @@ class DateTime {
             return null;
         date = new Date(date);
 
-        let now = Date.now();
+        let now = new Date(Date.now());
         let timeDiff = now - date;
 
         timeDiff /= 1000;
