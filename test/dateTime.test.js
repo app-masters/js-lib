@@ -70,6 +70,9 @@ test('Relative without hour', () => {
     relative = DateTime.relative(now.getTime() - 2 * hour, false);
     expect(relative).toBe("Hoje");
 
+    relative = DateTime.relative(now.getTime() + 2 * hour, false);
+    expect(relative).toBe("Hoje");
+
     relative = DateTime.relative(now.getTime() - (day), false);
     expect(relative).toBe("Ontem");
 
@@ -93,6 +96,9 @@ test('Relative with hour', () => {
     relative = DateTime.relative(now.getTime() - 2 * hour, true);
     expect(relative).toBe("Hoje às 08:00");
 
+    relative = DateTime.relative(now.getTime() + 2 * hour, true);
+    expect(relative).toBe("Hoje às 12:00");
+
     relative = DateTime.relative(now.getTime() - (day), true);
     expect(relative).toBe("Ontem às 10:00");
 
@@ -100,7 +106,7 @@ test('Relative with hour', () => {
     expect(relative).toBe("Amanhã às 10:00");
 
     relative = DateTime.relative(now.getTime() - (8 * day + (2 * hour) + (20 * minute)), true);
-    expect(relative).toBe("15/11 às 07:40");
+    expect(relative).toBe("Dia 15 às 07:40");
 
     relative = DateTime.relative(now.getTime() - (40 * day + (2 * hour) + (20 * minute) + (30 * second)), true);
     expect(relative).toBe("14/10 às 06:39");

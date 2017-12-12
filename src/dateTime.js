@@ -64,16 +64,20 @@ class DateTime {
             return null;
         date = new Date(date);
 
-        let now = new Date();
+        let now = Date.now();
         let timeDiff = now - date;
 
         timeDiff /= 1000;
 
-        let days = -Math.floor(timeDiff / 86400);
+        let sameYear = date.getYear() === now.getYear();
+        let sameMonth = sameYear && date.getMonth() === now.getMonth();
+        let sameDay = sameMonth && date.getDate() === now.getDate();
+
+        let days =  sameDay ? 0 : -Math.floor(timeDiff / 86400);
         let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
         let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
         let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
-        let sameYear = date.getYear() === now.getYear();
+
 
         let hour = (showHour ? ' às ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) : '');
 
@@ -88,6 +92,8 @@ class DateTime {
             return 'Amanhã' + hour;
         } else if (days === -1) {
             return 'Ontem' + hour;
+        } else if (sameMonth) {
+            return "Dia "+("0" + date.getDate()).slice(-2) + hour;
         } else if (sameYear) {
             return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + hour;
         } else if (!sameYear) {
@@ -98,6 +104,12 @@ class DateTime {
             console.log("minutes", minutes);
             console.log("secs", secs);
         }
+    }
+
+    static _sameDay(d1, d2) {
+        return d1.getFullYear() === d2.getFullYear() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate();
     }
 
     /**

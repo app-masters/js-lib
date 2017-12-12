@@ -32,8 +32,8 @@ export default class VersionCheck {
             return true;
         }
         if (!minActualClientVersion || minActualClientVersion !== minClientVersion) {
-            console.log(param, minClientVersion);
-            console.log('Version now', VersionCheck.currentClientVersion);
+            // console.log(param, minClientVersion);
+            // console.log('Version now', VersionCheck.currentClientVersion);
             // The min version changed. Check it our version satisfies.
             let currentVersion = VersionCheck.currentClientVersion;
 
