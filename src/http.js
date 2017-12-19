@@ -107,8 +107,8 @@ class Http {
                 Http.fetch(url, {
                     method: 'GET',
                     headers: Http.headers
-                }).then(Http.checkListener)
-                    .then(Http.checkStatus)
+                }).then(Http.checkStatus)
+                    .then(Http.checkListener)
                     .then(Http.parseJSON)
                     .then(response => {
                         console.log(url + ' response', response);
@@ -134,8 +134,8 @@ class Http {
                     method: 'DELETE',
                     headers: Http.headers,
                     body: body
-                }).then(Http.checkListener)
-                    .then(Http.checkDeleteStatus)
+                }).then(Http.checkDeleteStatus)
+                    .then(Http.checkListener)
                     .then(response => {
                         console.log(url + ' response', response);
                         resolve(response);
@@ -161,7 +161,7 @@ class Http {
                 let err = {};
                 err.stack = new Error().stack;
                 err.name = response.status;
-                err.message = data;
+                err.message = data || 'error with no message';
 
                 // Log it on rollbar
                 Rollbar.error(err);
@@ -188,7 +188,7 @@ class Http {
                 let err = {};
                 err.stack = new Error().stack;
                 err.name = response.status;
-                err.message = data;
+                err.message = data || 'error with no message';
 
                 // Log it on rollbar
                 Rollbar.error(err);
