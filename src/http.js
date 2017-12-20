@@ -125,6 +125,30 @@ class Http {
         );
     }
 
+    static download (uri) {
+        let url = Http.getUrl(uri);
+        return new Promise((resolve, reject) => {
+                console.log(url + ' - GET');
+                Http.fetch(url, {
+                    method: 'GET',
+                    headers: Http.headers
+                }).then(Http.checkListener)
+                    .then(Http.checkStatus)
+                    .then(response => {
+                        resolve(response);
+                    }).catch(error => {
+                    if (error.message !== 'Network request failed') {
+                        console.error('GET > ' + url + ' > error', error);
+                    } else {
+                        console.warn('GET > Network request failed -  Are you offline?');
+                    }
+                    reject(error);
+                });
+            }
+        );
+    }
+
+
     static delete (uri, body) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
