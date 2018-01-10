@@ -73,7 +73,7 @@ class AppBootstrap {
         // 5 - Version Check
         VersionCheck.setCurrentVersion(client, version);
         VersionCheck.onMinVersionNotSatifies(Http, callback.onMinVersionNotSatifies);
-        VersionCheck.onNewVersion(storage, callback.onNewVersion);
+        VersionCheck.onNewVersion(storage).then(callback.onNewVersion);
 
         // // 6 - Capture errors onUncaught in AmActions
         // AMActions.onUncaughtError((e) => {

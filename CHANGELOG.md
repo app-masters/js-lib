@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.0.22] - 2017-12-20
+## [1.0.23] - 2017-01-10
+### Changed
+- VersionCheck.onNewVersion is now async
+
+## [1.0.22] - 2017-01-09
 ### Changed
 - storage.hasItem now reject on catch of getItem
 
