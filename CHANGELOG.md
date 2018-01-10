@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.22] - 2017-12-20
+### Changed
+- storage.hasItem now reject on catch of getItem
+
 ## [1.0.21] - 2017-12-20
 ### Changed
 - Created http download method

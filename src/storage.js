@@ -1,4 +1,5 @@
 import FlexStorage from './dependencies/flexStorage';
+
 class AMStorage {
     constructor (storageBackend) {
         this.amStorage = new FlexStorage({
@@ -65,6 +66,8 @@ class AMStorage {
                     !(Array.isArray(data) && data.length < 1) && // Data is not a empty array
                     data !== null;
                 fulfill(itemInStorage);
+            }).catch(err => {
+                reject(err);
             });
         });
     }
