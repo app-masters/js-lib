@@ -6,11 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.0.23] - 2017-01-10
+## [1.0.24] - 2018-01-22
+### Changed
+- Text.formatNumber and Text.formatReal added 
+
+## [1.0.23] - 2018-01-10
 ### Changed
 - VersionCheck.onNewVersion is now async
 
-## [1.0.22] - 2017-01-09
+## [1.0.22] - 2018-01-09
 ### Changed
 - storage.hasItem now reject on catch of getItem
 
