@@ -7,9 +7,9 @@ import nock from 'nock';
 jest.setTimeout(1000);
 
 test('Simple setup in HTTP', () => {
-    let baseURL = 'http://localhost.com:3000';
-    let userId = 'thisIsAnUserId123';
-    let headers = {
+    const baseURL = 'http://localhost.com:3000';
+    const userId = 'thisIsAnUserId123';
+    const headers = {
         'content-type': 'application/json',
         'mobile-version': '1.0.0',
         'client': 'mobile'
@@ -22,6 +22,24 @@ test('Simple setup in HTTP', () => {
 
     expect(Http.baseURL).toBe(baseURL);
     expect(Http.headers).toBe(headers);
+});
+
+test('Specific setup in HTTP', () => {
+    const headers = Http.headers;
+    const version = '1.0.0';
+    const client = 'mobile';
+    const contentType = 'application/json';
+    const token = 'JWT-0000000000000';
+
+    Http.setup(version, client, contentType);
+    expect(Http.headers).toEqual(headers);
+    expect(Http.headers['mobile-version']).toEqual(version);
+    expect(Http.headers['client']).toEqual(client);
+    expect(Http.headers['content-type']).toEqual(contentType);
+
+    Http.setAuthorization(token);
+    expect(Http.headers['authorization']).toEqual(token);
+
 });
 
 test('[200] GET Status OK', () => {
@@ -65,4 +83,10 @@ test('[FetchError] GET Failed to fetch', () => {
     }).catch((error) => {
         expect(error.name).toBe('FetchError');
     });
+});
+
+test('Reseting Http', () => {
+    Http.reset();
+    expect(Http.headers).toEqual(Http.defaultHeaders);
+    expect(Http.authorization).toEqual('');
 });

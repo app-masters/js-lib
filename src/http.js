@@ -1,6 +1,26 @@
 import Rollbar from './rollbar';
 
 class Http {
+    static setup (version, client, contentType) {
+        let headers = {};
+        headers['content-type'] = contentType;
+        headers[client + '-version'] = version;
+        headers['client'] = 'mobile';
+        Http.defaultHeaders = headers;
+        Http.headers = headers;
+    }
+
+    static reset () {
+        Http.headers = Http.defaultHeaders;
+        Http.authorization = '';
+        Http.params = {};
+    }
+
+    static setAuthorization (token) {
+        Http.authorization = token;
+        Http.headers = {...Http.defaultHeaders, authorization: token}
+    }
+
     static setFetch (fetchMethod) {
         Http.fetch = fetchMethod;
     }
@@ -26,7 +46,7 @@ class Http {
             throw new Error('This environment don\'t have the window.fetch. ' +
                 'Please set a custom fetch method using Http.setFetch().');
         }
-        var url=null;
+        let url = null;
         if (!uri.startsWith('http'))
             url = Http.baseURL + uri;
         else
@@ -34,13 +54,11 @@ class Http {
         const regex = /{.*}/i;
         let matches = url.match(regex);
         if (matches) {
-            // console.log('MATCHES: ', matches);
             matches.map((match) => {
                 let value = Http.params[match];
                 url = url.replace(match, value);
             });
         }
-        // console.log('Url:', url);
         return url;
     }
 
@@ -148,7 +166,6 @@ class Http {
         );
     }
 
-
     static delete (uri, body) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
@@ -231,7 +248,10 @@ class Http {
         Http.requestListener = callback;
     }
 }
-Http.headers = '';
+
+Http.headers = {};
+Http.defaultHeaders = {};
+Http.authorization = '';
 Http.baseURL = '';
 Http.params = {};
 Http.requestListener = null;

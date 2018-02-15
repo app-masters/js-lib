@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.25] - 2018-02-15
+### Changed
+- Http.reset and Http.setup created to simplify the bootstrap
+
 ## [1.0.24] - 2018-01-22
 ### Changed
 - Text.formatNumber and Text.formatReal added 
