@@ -94,19 +94,6 @@ test('[FetchError] GET Failed to fetch', () => {
     });
 });
 
-test('[Google error] TypeError: Failed to fetch', () => {
-    nock(Http.baseURL, {reqheaders: Http.headers})
-        .get('/fail')
-        .replyWithError('TypeError: Failed to fetch');
-    expect.assertions(1);
-
-    return Http.get('/fail').then((response) => {
-        expect(response).toBe(false);
-    }).catch((error) => {
-        expect(error.name).toBe('TypeError: Failed to fetch');
-    });
-});
-
 test('Reseting Http', () => {
     Http.reset();
     expect(Http.headers).toEqual(Http.defaultHeaders);
