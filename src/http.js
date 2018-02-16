@@ -1,4 +1,4 @@
-import Rollbar from './rollbar';
+import ErrorHandler from './httpErrorHandler';
 
 class Http {
     static setup (version, client, contentType) {
@@ -79,11 +79,7 @@ class Http {
                         console.log('POST > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('POST > ' + url + ' > error', error);
-                    } else {
-                        console.warn('POST > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -107,11 +103,7 @@ class Http {
                         console.log('PUT > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('PUT > ' + url + ' > error', error);
-                    } else {
-                        console.warn('PUT > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -132,11 +124,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('GET > ' + url + ' > error', error);
-                    } else {
-                        console.warn('GET > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -146,7 +134,7 @@ class Http {
     static download (uri) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
-                console.log(url + ' - GET');
+                console.log(url + ' - DOWNLOAD');
                 Http.fetch(url, {
                     method: 'GET',
                     headers: Http.headers
@@ -155,11 +143,7 @@ class Http {
                     .then(response => {
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('GET > ' + url + ' > error', error);
-                    } else {
-                        console.warn('GET > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -181,11 +165,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('DELETE > ' + url + ' > error', error);
-                    } else {
-                        console.warn('DELETE > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -197,18 +177,7 @@ class Http {
         if (response.status === 200 || response.status === 201) { // 200 - OK || 201 - Created
             return response;
         } else {
-            return response.text().then(data => {
-                // console.error('Error Message', data);
-                let err = {};
-                err.stack = new Error().stack;
-                err.name = response.status;
-                err.message = data || 'error with no message';
-
-                // Log it on rollbar
-                Rollbar.error(err);
-
-                throw err;
-            });
+            return ErrorHandler.mount(response);
         }
     }
 
@@ -224,18 +193,7 @@ class Http {
         if (response.status === 200 || response.status === 204) {
             return response;
         } else {
-            return response.text().then(data => {
-                // console.error(data);
-                let err = {};
-                err.stack = new Error().stack;
-                err.name = response.status;
-                err.message = data || 'error with no message';
-
-                // Log it on rollbar
-                Rollbar.error(err);
-
-                throw err;
-            });
+            return ErrorHandler.mount(response);
         }
     }
 

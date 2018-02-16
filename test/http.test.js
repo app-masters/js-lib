@@ -1,10 +1,19 @@
 /* global test, expect, jest */
 
 import Http from '../src/http';
+import ErrorHandler from '../src/httpErrorHandler';
 import fetch from 'node-fetch';
 import nock from 'nock';
 
 jest.setTimeout(1000);
+
+test('Setting the callback for HTTP errors', () => {
+    const onAPIFail = (error) => console.error('onAPIFail: ', error);
+    const onConnectionFail = (error) => console.error('onConnectionFail: ', error);
+    const callback = {onAPIFail, onConnectionFail};
+    ErrorHandler.setup(callback);
+    expect(ErrorHandler.callback).not.toBe(undefined);
+});
 
 test('Simple setup in HTTP', () => {
     const baseURL = 'http://localhost.com:3000';
@@ -51,7 +60,7 @@ test('[200] GET Status OK', () => {
     return Http.get('/').then((response) => {
         expect(response.ok).toBe(true);
     }).catch((error) => {
-        expect(error).toBe(true);
+        expect(error).toBe(false);
     });
 });
 
@@ -60,7 +69,7 @@ test('[404] GET Not found', () => {
     expect.assertions(1);
 
     return Http.get('/').then((response) => {
-        expect(response).toBe(true);
+        expect(response).toBe(false);
     }).catch((error) => {
         expect(error.name).toBe(404);
     });
@@ -79,9 +88,22 @@ test('[FetchError] GET Failed to fetch', () => {
     expect.assertions(1);
 
     return Http.get('/').then((response) => {
-        expect(response).toBe(true);
+        expect(response).toBe(false);
     }).catch((error) => {
         expect(error.name).toBe('FetchError');
+    });
+});
+
+test('[Google error] TypeError: Failed to fetch', () => {
+    nock(Http.baseURL, {reqheaders: Http.headers})
+        .get('/fail')
+        .replyWithError('TypeError: Failed to fetch');
+    expect.assertions(1);
+
+    return Http.get('/fail').then((response) => {
+        expect(response).toBe(false);
+    }).catch((error) => {
+        expect(error.name).toBe('TypeError: Failed to fetch');
     });
 });
 
