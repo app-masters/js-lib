@@ -11,33 +11,41 @@ class HttpErrorHandler {
     }
 
     static handle (error) {
-        console.log('handle', error);
-        error.name = error.name || error;
-        error.stack = new Error().stack;
-        error.level = 'error';
+        const errorObj = {payload: error}; // Keep the original error on payload
 
-        const handler = errorLibrary[error.name];
+        // TypeError can have different meanings, so check the message
+        if (error.name !== 'TypeError') {
+            errorObj.name = error.name;
+            errorObj.message = error.message;
+        } else {
+            errorObj.name = error.message;
+            errorObj.message = error.name;
+        }
+        errorObj.stack = new Error().stack;
+        errorObj.level = 'error'; // Default level
+
+        const handler = errorLibrary[errorObj.name];
         if (handler) {
             if (handler.message) {
-                error.message = handler.message;
+                errorObj.message = handler.message;
             }
             if (handler.callback && HttpErrorHandler.callback[handler.callback]) {
-                HttpErrorHandler.callback[handler.callback](error);
+                HttpErrorHandler.callback[handler.callback](errorObj);
             }
             if (handler.level === null) {
-                return error;
+                return errorObj;
             } else {
-                error.level = handler.level;
+                errorObj.level = handler.level;
             }
         }
 
         // Send to rollbar or defined errorCatcher
         if (this.callback.errorCatcher) {
-            this.callback.errorCatcher(error);
+            this.callback.errorCatcher(errorObj);
         } else {
-            Rollbar[error.level](error);
+            Rollbar[errorObj.level](errorObj);
         }
-        return error;
+        return errorObj;
     };
 
     static mount (response) {
@@ -79,7 +87,7 @@ const errorLibrary = {
         message: 'Falha de comunicação com o servidor.',
         callback: 'onConnectionFail'
     },
-    'TypeError: Failed to fetch': {
+    'Failed to fetch': {
         level: 'warning',
         message: 'Falha de comunicação com o servidor.',
         callback: 'onConnectionFail'
