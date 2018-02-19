@@ -1,19 +1,19 @@
-import * as moment from "moment";
+import * as moment from 'moment';
 
-import {Http, VersionCheck, Rollbar} from "./index";
+import { Http, VersionCheck, Rollbar, HttpErrorHandler } from './index';
 
 class AppBootstrap {
 
-    static setup(client, packag, envs, storage, callback) {
+    static setup (client, packag, envs, storage, callback) {
 
         // Validate parans
-        if (!client || ["web", "mobile", "admin"].indexOf(client) < 0)
-            throw ("Unrecognized or undefined client: " + client);
+        if (!client || ['web', 'mobile', 'admin'].indexOf(client) < 0)
+            throw ('Unrecognized or undefined client: ' + client);
         // @todo Validate envs
         // @todo Validate packag
         // @todo Validate storage
         if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion || !callback.onUncaughtError)
-            throw ("You must pass callback parameter to AppBootstrap.setup, with onMinVersionNotSatifies, onNewVersion and onUncaughtError methods.");
+            throw ('You must pass callback parameter to AppBootstrap.setup, with onMinVersionNotSatifies, onNewVersion and onUncaughtError methods.');
         AppBootstrap.callbacks = callback;
 
         // 1 - Decide env
@@ -22,50 +22,46 @@ class AppBootstrap {
         let firebase;
         let buildTime;
         let buildTimeString;
-        if (client !== "mobile") {
+        if (client !== 'mobile') {
             firebase = process.env.FIREBASE && process.env.FIREBASE === true;
             buildTime = new Date(process.env.BUILD_TIME);
-            buildTimeString = buildTime.toDateString() + " " + buildTime.toTimeString();
-            console.log('CLIENT:' + client + " - ENV:" + nodeEnv + " - VERSION:" + version + " - RELEASE DATE:" + process.env.APP_RELEASE + " - BUILD_TIME:" + buildTimeString + " - FIREBASE:" + firebase);
+            buildTimeString = buildTime.toDateString() + ' ' + buildTime.toTimeString();
+            console.log('CLIENT:' + client + ' - ENV:' + nodeEnv + ' - VERSION:' + version + ' - RELEASE DATE:' + process.env.APP_RELEASE + ' - BUILD_TIME:' + buildTimeString + ' - FIREBASE:' + firebase);
         } else if (__DEV__ !== undefined) {
-            console.log('MOBILE CLIENT:' + client + " - ENV:" + nodeEnv + " - VERSION:" + version);
+            console.log('MOBILE CLIENT:' + client + ' - ENV:' + nodeEnv + ' - VERSION:' + version);
         }
 
         // console.log(envs);
         let config;
-        if (nodeEnv === "development" && firebase) {
-            config = envs["development_firebase"];
-            console.log("> firebase development <");
+        if (nodeEnv === 'development' && firebase) {
+            config = envs['development_firebase'];
+            console.log('> firebase development <');
         } else {
             config = envs[nodeEnv];
         }
 
-        console.log("Loaded config", config);
+        console.log('Loaded config', config);
         if (config === undefined) {
-            throw new Error("No config for NODE_ENV \"" + nodeEnv + "\"");
+            throw new Error('No config for NODE_ENV "' + nodeEnv + '"');
         }
         AppBootstrap.config = config;
 
         // 2 - Rollbar / bugsnag
         if (config.rollbarToken && client !== 'mobile') {
-            Rollbar.setup(config.rollbarToken, client + "_" + nodeEnv, process.env.APP_VERSION);
+            Rollbar.setup(config.rollbarToken, client + '_' + nodeEnv, process.env.APP_VERSION);
         } else if (client === 'mobile') {
             // Config of rollbar for native
             console.log('AppBootstrap is not configuring the Rollbar, please check if other source is configuring it.');
-        } else if (nodeEnv === "development") {
-            console.warn("Rollbar not set on dev. It's ok.");
+        } else if (nodeEnv === 'development') {
+            console.warn('Rollbar not set on dev. It\'s ok.');
         } else {
-            throw new Error("You must have Rollbar or bugsnag on your app.");
+            throw new Error('You must have Rollbar or bugsnag on your app.');
         }
 
         // 3 - Http
         Http.setBaseURL(config.baseUrl);
-        Http.setHeaders({
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'client': client,
-            'client-env': nodeEnv
-        });
+        Http.setup(packag.version, client, nodeEnv, 'application/json');
+        HttpErrorHandler.setup(callback);
 
         // 4 -  Moment
         moment.updateLocale('pt-br', require('moment/locale/pt-br'));
@@ -85,8 +81,8 @@ class AppBootstrap {
         // });
 
         // 7 - Mobile fixes
-        if (client === "mobile") {
-            if (nodeEnv === "production") {
+        if (client === 'mobile') {
+            if (nodeEnv === 'production') {
                 // Remove logs on PROD (performance)
                 console.log = function () {
                 };
@@ -103,30 +99,30 @@ class AppBootstrap {
             console.disableYellowBox = true;
         }
 
+        // 8 -
 
         return true;
 
     }
 
-    static onUncaughtError() {
+    static onUncaughtError () {
         return AppBootstrap.callbacks.onUncaughtError;
     }
 
-    static onMinVersionNotSatifies() {
+    static onMinVersionNotSatifies () {
         return AppBootstrap.callbacks.onMinVersionNotSatifies;
     }
 
-    static onNewVersion() {
+    static onNewVersion () {
         return AppBootstrap.callbacks.onNewVersion;
     }
 
-    static getConfig() {
+    static getConfig () {
         return AppBootstrap.config;
     }
 }
 
 AppBootstrap.callbacks = {};
 AppBootstrap.config = null;
-
 
 export default AppBootstrap;

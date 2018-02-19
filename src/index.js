@@ -7,6 +7,7 @@ import Text from './text';
 import AMStorage from './storage';
 import AppBootstrap from './appBootstrap';
 import ObjHandler from './objHandler';
+import HttpErrorHandler from './httpErrorHandler';
 
 export {
     Http,
@@ -17,5 +18,6 @@ export {
     VersionCheck,
     AMStorage,
     AppBootstrap,
-    ObjHandler
+    ObjHandler,
+    HttpErrorHandler
 };

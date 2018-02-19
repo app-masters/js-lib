@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.1.0/1.1.1] - 2018-02-16
+## [1.1.0/1.1.2] - 2018-02-16
 ### Added
 - Error handler in Http: now the fetch errors are handled correctly
+### Changed
+- AppBootstrap now use the new Http.setup and set the callbacks for Http errors
 
 ## [1.0.25] - 2018-02-15
 ### Changed

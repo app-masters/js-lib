@@ -66,12 +66,13 @@ test('[200] GET Status OK', () => {
 
 test('[404] GET Not found', () => {
     nock(Http.baseURL, {reqheaders: Http.headers}).get('/').reply(404);
-    expect.assertions(1);
+    expect.assertions(2);
 
     return Http.get('/').then((response) => {
         expect(response).toBe(false);
     }).catch((error) => {
         expect(error.name).toBe(404);
+        expect(error.message).toBe('Não encontrado.');
     });
 });
 

@@ -3,11 +3,13 @@ import Rollbar from './rollbar';
 class HttpErrorHandler {
     static setup (callback) {
         // More callbacks can be added if necessary in the future
-        if (!callback || !callback.onConnectionFail || !callback.onAPIFail)
-            throw ('You must pass callback parameter to AppBootstrap.setup, with onConnectionFail and onAPIFail methods.');
-        HttpErrorHandler.callback['onAPIFail'] = callback.onAPIFail;
-        HttpErrorHandler.callback['onConnectionFail'] = callback.onConnectionFail;
-        HttpErrorHandler.callback['errorCatcher'] = callback.errorCatcher; // Optional
+        if (!callback || !callback.onConnectionFail || !callback.onAPIFail) {
+            console.warn('You must pass callback parameter to AppBootstrap.setup, with onConnectionFail and onAPIFail methods.');
+        } else {
+            HttpErrorHandler.callback['onAPIFail'] = callback.onAPIFail;
+            HttpErrorHandler.callback['onConnectionFail'] = callback.onConnectionFail;
+            HttpErrorHandler.callback['errorCatcher'] = callback.errorCatcher; // Optional
+        }
     }
 
     static handle (error) {
@@ -69,12 +71,12 @@ const errorLibrary = {
     },
     '500': {
         level: 'warning',
-        message: 'Falha de comunicação com o servidor. Tente novamente.',
+        message: 'Falha do servidor. Tente novamente.',
         callback: 'onConnectionFail'
     },
     '503': {
         level: 'warning',
-        message: 'Falha de comunicação com o servidor. Tente novamente.',
+        message: 'Falha do servidor. Tente novamente.',
         callback: 'onConnectionFail'
     },
     'ValidatorError': {

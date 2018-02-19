@@ -1,11 +1,13 @@
 import ErrorHandler from './httpErrorHandler';
 
 class Http {
-    static setup (version, client, contentType) {
+    static setup (version, client, env, contentType) {
         let headers = {};
-        headers['content-type'] = contentType;
+        headers['Content-Type'] = contentType;
+        headers['Accept'] = contentType;
         headers[client + '-version'] = version;
-        headers['client'] = 'mobile';
+        headers['client'] = client;
+        headers['client-env'] = env;
         Http.defaultHeaders = headers;
         Http.headers = headers;
     }

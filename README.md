@@ -15,11 +15,12 @@ import { Http } from '@app-masters/js-lib';
 
 const version = '1.0.0'; // get from package.json
 const client = 'mobile'; // use 'mobile', 'admin' or 'web'
+const env = 'development'; // use 'development', 'staging' or 'production'
 const contentType = 'application/json';
 const baseURL = 'http://localhost.com:3000';
 const token = 'JWT-0000000000000'; // user's authentication token
 
-Http.setup(version, client, contentType);
+Http.setup(version, client, env, contentType);
 Http.setBaseURL(baseURL);
 
 // after the authentication process
@@ -31,9 +32,11 @@ Setting your headers like this, will give you this headers:
 
 ````javascript
 {
-    'content-type': 'application/json',
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
     'mobile-version': '1.0.0',
     'client': 'mobile',
+    'client-env': 'development',
     'authorization': 'JWT-0000000000000'
 }
 ````
