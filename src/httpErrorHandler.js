@@ -59,7 +59,6 @@ class HttpErrorHandler {
 }
 
 // Http errors that need a special handle.
-
 const errorLibrary = {
     '400': {
         level: null //Don't send to rollbar

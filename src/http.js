@@ -5,9 +5,9 @@ class Http {
         let headers = {};
         headers['Content-Type'] = contentType;
         headers['Accept'] = contentType;
-        headers[client + '-version'] = version;
         headers['client'] = client;
         headers['client-env'] = env;
+        headers[client + '-version'] = version;
         Http.defaultHeaders = headers;
         Http.headers = headers;
     }
@@ -32,6 +32,7 @@ class Http {
     }
 
     static setHeaders (headersSetup) {
+        console.warn('Http.setHeaders is deprecated. Consider use Http.setup(version, client, env, contentType) instead.');
         Http.headers = headersSetup;
     }
 
