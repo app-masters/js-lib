@@ -28,10 +28,10 @@ class Notification {
         if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
             this.device.platform = 'native';
             this.notificationClass = require(`./notificationNative`);
-        }else if (window.cordova) {
+        }else if(!document.URL.startsWith('http')) {
             this.device.platform = 'cordova';
             this.notificationClass = require(`./notificationCordova`);
-        } else {
+        }else{
             this.device.platform = 'web';
             this.notificationClass = require(`./notificationWeb`);
         }
