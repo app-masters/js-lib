@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.4/1.1.7] - 2018-02-26
+### Added
+- Client notification for cordova, native and webapp
+
 ## [1.1.0/1.1.3] - 2018-02-16
 ### Added
 - Error handler in Http: now the fetch errors are handled correctly

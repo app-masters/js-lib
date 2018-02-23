@@ -1,12 +1,10 @@
-import Notification from './notification';
-
-class NotificationWeb extends Notification {
+class NotificationCordova {
     /**
      *
-     * @param onSucess
+     * @param onSuccess
      * @param onFail
      */
-    static setToken(onSucess, onFail) {
+    static getToken(onSuccess, onFail) {
         window.FirebasePlugin.getToken(onSuccess, onFail);
     }
 
@@ -33,8 +31,13 @@ class NotificationWeb extends Notification {
      * @param config
      */
     static setup(config) {
+        if (!window.FirebasePlugin) {
+            throw new Error('Notification.setup error: FirebasePlugin is missing');
+        }
         this.config = config;
     }
 
     static config;
 }
+
+export default NotificationCordova;

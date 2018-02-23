@@ -1,6 +1,14 @@
+import NotificationWeb from './notificationWeb';
+import NotificationCordova from './notificationCordova';
+
 class Notification {
-    static setToken(onSuccess, onFail) {
-        this.notificationClass.setToken(onSuccess, onFail);
+    /**
+     *
+     * @param onSuccess
+     * @param onFail
+     */
+    static getToken(onSuccess, onFail) {
+        this.notificationClass.getToken(onSuccess, onFail);
     }
 
     /**
@@ -25,15 +33,16 @@ class Notification {
      * throws an error when couldn't find the platform or the os
      */
     static setDevice() {
-        if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        /*if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
             this.device.platform = 'native';
             this.notificationClass = require(`./notificationNative`);
-        }else if(!document.URL.startsWith('http')) {
+        }else*/
+        if (!document.URL.startsWith('http')) {
             this.device.platform = 'cordova';
-            this.notificationClass = require(`./notificationCordova`);
-        }else{
+            this.notificationClass = NotificationCordova;
+        } else {
             this.device.platform = 'web';
-            this.notificationClass = require(`./notificationWeb`);
+            this.notificationClass = NotificationWeb;
         }
         if (this.device.platform === null) {
             throw new Error(`Couldn't find the current Platform`);

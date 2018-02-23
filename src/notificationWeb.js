@@ -1,15 +1,20 @@
-import Notification from './notification';
+import firebase from 'firebase';
 
-class NotificationWeb extends Notification {
+class NotificationWeb {
     /**
      *
-     * @param onSucess
+     * @param onSuccess
      * @param onFail
      */
-    static setToken(onSucess, onFail) {
-        messaging.getToken()
-            .then(onSuccess)
-            .catch(onFail);
+    static getToken(onSuccess, onFail) {
+        // first request the permission. Then returns de token
+        this.messaging.requestPermission().then(() => {
+            this.messaging.getToken()
+                .then(onSuccess)
+                .catch(onFail);
+        }).catch((err) => {
+            throw err;
+        });
     }
 
     /**
@@ -18,7 +23,7 @@ class NotificationWeb extends Notification {
      * @param onFail
      */
     static handleMessage(onSuccess, onFail) {
-        messaging.onMessage(onSuccess);
+        this.messaging.onMessage(onSuccess);
     }
 
     /**
@@ -27,7 +32,7 @@ class NotificationWeb extends Notification {
      * @param onFail
      */
     static onTokenRefresh(onSuccess, onFail) {
-        messaging.onTokenRefresh(onSuccess, onFail);
+        this.messaging.onTokenRefresh(onSuccess, onFail);
     }
 
     /**
@@ -35,8 +40,20 @@ class NotificationWeb extends Notification {
      * @param config
      */
     static setup(config) {
-        this.config = config;
+        try {
+            firebase.initializeApp(config);
+            this.messaging = firebase.messaging();
+            if (!this.messaging) {
+                throw new Error('Notification.setup error: Messaging is missing');
+            }
+            this.config = config;
+        }catch (error) {
+            throw error;
+        }
     }
 
     static config;
+    static messaging;
 }
+
+export default NotificationWeb;
