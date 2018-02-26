@@ -8,6 +8,7 @@ import AMStorage from './storage';
 import AppBootstrap from './appBootstrap';
 import ObjHandler from './objHandler';
 import HttpErrorHandler from './httpErrorHandler';
+import Notification from './notification';
 
 export {
     Http,
@@ -19,5 +20,6 @@ export {
     AMStorage,
     AppBootstrap,
     ObjHandler,
-    HttpErrorHandler
+    HttpErrorHandler,
+    Notification
 };
