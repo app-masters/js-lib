@@ -36,18 +36,26 @@ class Rollbar {
         Rollbar.sendPersonIfNeeded();
         if (this.mustSend())
             rollbar.info(message, payload, err, callback);
+        else {
+            console.warn('Rollbar.info > Warning whould be sent to rollbar');
+            console.log(err,message,payload);
+        }
     }
 
     static debug(message, payload, err, callback) {
         Rollbar.sendPersonIfNeeded();
         if (this.mustSend())
-            rollbar.info(message, payload, err, callback);
+            rollbar.debug(message, payload, err, callback);
+        else {
+            console.warn('Rollbar.debug > Warning whould be sent to rollbar');
+            console.log(err,message,payload);
+        }
     }
 
     static warning(err, message, payload, callback) {
         Rollbar.sendPersonIfNeeded();
         if (this.mustSend())
-            rollbar.info(message, payload, err, callback);
+            rollbar.warning(message, payload, err, callback);
         else {
             console.warn('Rollbar.warning > Warning whould be sent to rollbar');
             console.error(err,message,payload);
@@ -67,7 +75,11 @@ class Rollbar {
     static critical(err, message, payload, callback) {
         Rollbar.sendPersonIfNeeded();
         if (this.mustSend())
-            rollbar.error(err, message, payload, callback);
+            rollbar.critical(err, message, payload, callback);
+        else {
+            console.warn('Rollbar.critical > Error whould be sent to rollbar');
+            console.error(err);
+        }
     }
 
     static setPerson(id, email, name) {

@@ -1,6 +1,28 @@
-import Rollbar from './rollbar';
+import ErrorHandler from './httpErrorHandler';
 
 class Http {
+    static setup (version, client, env, contentType) {
+        let headers = {};
+        headers['Content-Type'] = contentType;
+        headers['Accept'] = contentType;
+        headers['client'] = client;
+        headers['client-env'] = env;
+        headers[client + '-version'] = version;
+        Http.defaultHeaders = headers;
+        Http.headers = headers;
+    }
+
+    static reset () {
+        Http.headers = Http.defaultHeaders;
+        Http.authorization = '';
+        Http.params = {};
+    }
+
+    static setAuthorization (token) {
+        Http.authorization = token;
+        Http.headers = {...Http.defaultHeaders, authorization: token}
+    }
+
     static setFetch (fetchMethod) {
         Http.fetch = fetchMethod;
     }
@@ -10,6 +32,7 @@ class Http {
     }
 
     static setHeaders (headersSetup) {
+        console.warn('Http.setHeaders is deprecated. Consider use Http.setup(version, client, env, contentType) instead.');
         Http.headers = headersSetup;
     }
 
@@ -26,7 +49,7 @@ class Http {
             throw new Error('This environment don\'t have the window.fetch. ' +
                 'Please set a custom fetch method using Http.setFetch().');
         }
-        var url=null;
+        let url = null;
         if (!uri.startsWith('http'))
             url = Http.baseURL + uri;
         else
@@ -34,13 +57,11 @@ class Http {
         const regex = /{.*}/i;
         let matches = url.match(regex);
         if (matches) {
-            // console.log('MATCHES: ', matches);
             matches.map((match) => {
                 let value = Http.params[match];
                 url = url.replace(match, value);
             });
         }
-        // console.log('Url:', url);
         return url;
     }
 
@@ -61,11 +82,7 @@ class Http {
                         console.log('POST > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('POST > ' + url + ' > error', error);
-                    } else {
-                        console.warn('POST > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -89,11 +106,7 @@ class Http {
                         console.log('PUT > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('PUT > ' + url + ' > error', error);
-                    } else {
-                        console.warn('PUT > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -114,11 +127,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('GET > ' + url + ' > error', error);
-                    } else {
-                        console.warn('GET > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -128,7 +137,7 @@ class Http {
     static download (uri) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
-                console.log(url + ' - GET');
+                console.log(url + ' - DOWNLOAD');
                 Http.fetch(url, {
                     method: 'GET',
                     headers: Http.headers
@@ -137,17 +146,12 @@ class Http {
                     .then(response => {
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('GET > ' + url + ' > error', error);
-                    } else {
-                        console.warn('GET > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
         );
     }
-
 
     static delete (uri, body) {
         let url = Http.getUrl(uri);
@@ -164,11 +168,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    if (error.message !== 'Network request failed') {
-                        console.error('DELETE > ' + url + ' > error', error);
-                    } else {
-                        console.warn('DELETE > Network request failed -  Are you offline?');
-                    }
+                    error = ErrorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -180,18 +180,7 @@ class Http {
         if (response.status === 200 || response.status === 201) { // 200 - OK || 201 - Created
             return response;
         } else {
-            return response.text().then(data => {
-                // console.error('Error Message', data);
-                let err = {};
-                err.stack = new Error().stack;
-                err.name = response.status;
-                err.message = data || 'error with no message';
-
-                // Log it on rollbar
-                Rollbar.error(err);
-
-                throw err;
-            });
+            return ErrorHandler.mount(response);
         }
     }
 
@@ -207,18 +196,7 @@ class Http {
         if (response.status === 200 || response.status === 204) {
             return response;
         } else {
-            return response.text().then(data => {
-                // console.error(data);
-                let err = {};
-                err.stack = new Error().stack;
-                err.name = response.status;
-                err.message = data || 'error with no message';
-
-                // Log it on rollbar
-                Rollbar.error(err);
-
-                throw err;
-            });
+            return ErrorHandler.mount(response);
         }
     }
 
@@ -231,7 +209,10 @@ class Http {
         Http.requestListener = callback;
     }
 }
-Http.headers = '';
+
+Http.headers = {};
+Http.defaultHeaders = {};
+Http.authorization = '';
 Http.baseURL = '';
 Http.params = {};
 Http.requestListener = null;

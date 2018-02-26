@@ -1,15 +1,24 @@
 /* global test, expect, jest */
 
 import Http from '../src/http';
+import ErrorHandler from '../src/httpErrorHandler';
 import fetch from 'node-fetch';
 import nock from 'nock';
 
 jest.setTimeout(1000);
 
+test('Setting the callback for HTTP errors', () => {
+    const onAPIFail = (error) => console.error('onAPIFail: ', error);
+    const onConnectionFail = (error) => console.error('onConnectionFail: ', error);
+    const callback = {onAPIFail, onConnectionFail};
+    ErrorHandler.setup(callback);
+    expect(ErrorHandler.callback).not.toBe(undefined);
+});
+
 test('Simple setup in HTTP', () => {
-    let baseURL = 'http://localhost.com:3000';
-    let userId = 'thisIsAnUserId123';
-    let headers = {
+    const baseURL = 'http://localhost.com:3000';
+    const userId = 'thisIsAnUserId123';
+    const headers = {
         'content-type': 'application/json',
         'mobile-version': '1.0.0',
         'client': 'mobile'
@@ -24,6 +33,24 @@ test('Simple setup in HTTP', () => {
     expect(Http.headers).toBe(headers);
 });
 
+test('Specific setup in HTTP', () => {
+    const headers = Http.headers;
+    const version = '1.0.0';
+    const client = 'mobile';
+    const contentType = 'application/json';
+    const token = 'JWT-0000000000000';
+
+    Http.setup(version, client, contentType);
+    expect(Http.headers).toEqual(headers);
+    expect(Http.headers['mobile-version']).toEqual(version);
+    expect(Http.headers['client']).toEqual(client);
+    expect(Http.headers['content-type']).toEqual(contentType);
+
+    Http.setAuthorization(token);
+    expect(Http.headers['authorization']).toEqual(token);
+
+});
+
 test('[200] GET Status OK', () => {
     nock(Http.baseURL, {reqheaders: Http.headers})
         .get('/')
@@ -33,18 +60,19 @@ test('[200] GET Status OK', () => {
     return Http.get('/').then((response) => {
         expect(response.ok).toBe(true);
     }).catch((error) => {
-        expect(error).toBe(true);
+        expect(error).toBe(false);
     });
 });
 
 test('[404] GET Not found', () => {
     nock(Http.baseURL, {reqheaders: Http.headers}).get('/').reply(404);
-    expect.assertions(1);
+    expect.assertions(2);
 
     return Http.get('/').then((response) => {
-        expect(response).toBe(true);
+        expect(response).toBe(false);
     }).catch((error) => {
         expect(error.name).toBe(404);
+        expect(error.message).toBe('Não encontrado.');
     });
 });
 
@@ -61,8 +89,14 @@ test('[FetchError] GET Failed to fetch', () => {
     expect.assertions(1);
 
     return Http.get('/').then((response) => {
-        expect(response).toBe(true);
+        expect(response).toBe(false);
     }).catch((error) => {
         expect(error.name).toBe('FetchError');
     });
+});
+
+test('Reseting Http', () => {
+    Http.reset();
+    expect(Http.headers).toEqual(Http.defaultHeaders);
+    expect(Http.authorization).toEqual('');
 });
