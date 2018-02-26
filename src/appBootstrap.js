@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-import { Http, VersionCheck, Rollbar, HttpErrorHandler } from './index';
+import { Http, VersionCheck, Rollbar, HttpErrorHandler, Notification } from './index';
 
 class AppBootstrap {
 
@@ -99,8 +99,10 @@ class AppBootstrap {
             console.disableYellowBox = true;
         }
 
-        // 8 -
-
+        // 8 - Notification
+        if(config.notification){
+            Notification.setup(config.notification);
+        }
         return true;
 
     }

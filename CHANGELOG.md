@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.8/1.1.9] - 2018-02-26
+### Changed
+- AppBoostrap now sets the config.notification on the Notification class
+
 ## [1.1.4/1.1.7] - 2018-02-26
 ### Added
 - Client notification for cordova, native and webapp
