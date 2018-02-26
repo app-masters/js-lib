@@ -73,7 +73,7 @@ class DateTime {
         let sameMonth = sameYear && date.getMonth() === now.getMonth();
         let sameDay = sameMonth && date.getDate() === now.getDate();
 
-        let days =  sameDay ? 0 : -Math.floor(timeDiff / 86400);
+        let days = sameDay ? 0 : -Math.floor(timeDiff / 86400);
         let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
         let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
         let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
@@ -93,7 +93,7 @@ class DateTime {
         } else if (days === -1) {
             return 'Ontem' + hour;
         } else if (sameMonth) {
-            return "Dia "+("0" + date.getDate()).slice(-2) + hour;
+            return "Dia " + ("0" + date.getDate()).slice(-2) + hour;
         } else if (sameYear) {
             return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + hour;
         } else if (!sameYear) {
@@ -117,7 +117,7 @@ class DateTime {
      * @param seconds
      */
     static secondsToHour(seconds, round) {
-        if (!seconds) return null;
+        if (seconds === undefined || seconds === null) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
         round = false;
@@ -132,7 +132,7 @@ class DateTime {
      * @param seconds
      */
     static secondsToHumanize(seconds) {
-        if (!seconds) return null;
+        if (seconds === undefined || seconds === null) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
         // console.log("duration", duration);
