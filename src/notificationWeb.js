@@ -39,20 +39,19 @@ class NotificationWeb {
      *
      * @param config
      */
-    static setup(config) {
+    static setup(firebase) {
         try {
-            firebase.initializeApp(config);
+            this.firebase = firebase;
             this.messaging = firebase.messaging();
             if (!this.messaging) {
                 throw new Error('Notification.setup error: Messaging is missing');
             }
-            this.config = config;
         }catch (error) {
             throw error;
         }
     }
 
-    static config;
+    static firebase;
     static messaging;
 }
 
