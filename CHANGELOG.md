@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.10/1.1.11] - 2018-02-26
+### Changed
+- Notification Web now receives a firebase instance pre-loaded
+
 ## [1.1.8/1.1.9] - 2018-02-26
 ### Changed
 - AppBoostrap now sets the config.notification on the Notification class
