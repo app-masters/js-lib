@@ -1,5 +1,3 @@
-import firebase from 'firebase';
-
 class NotificationWeb {
     /**
      *
