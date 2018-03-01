@@ -52,12 +52,12 @@ class HttpErrorHandler {
 
     static mount (response) {
         let error = {};
+        error.headers = response.headers;
         error.name = response.status;
-        response.text().then((message) => {
+        return response.text().then((message) => {
             error.message = message || 'Error with no message';
             throw error;
         });
-        throw error;
     }
 }
 
