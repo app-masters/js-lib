@@ -13,6 +13,13 @@ class Notification {
 
     /**
      *
+     * @param user
+     */
+    static checkToken(user){
+        this.notificationClass.checkToken(user);
+    }
+    /**
+     *
      * @param onSuccess
      * @param onFail
      */
