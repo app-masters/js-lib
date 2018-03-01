@@ -6,16 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [1.1.16/1.1.17] - 2018-03-01
-### Changed
-- Firebase import no more on notificationWeb
-
-## [1.1.14/1.1.15] - 2018-03-01
-### Changed
-- All the Notification.getToken() functions makes a different callback sending the current object: notification = {'platform': token}
-
 ## [1.1.12/1.1.13] - 2018-03-01
 ### Changed
+- Firebase import no more on notificationWeb
+- All the Notification.getToken() functions makes a different callback sending the current object: notification = {'platform': token}
 - HttpErrorHandler deals with text promises
 - Error.mount now return promises
 
