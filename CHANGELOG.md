@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.12] - 2018-03-01
+### Changed
+- HttpErrorHandler deals with text promises
+
 ## [1.1.10/1.1.11] - 2018-02-26
 ### Changed
 - Notification Web now receives a firebase instance pre-loaded

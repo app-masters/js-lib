@@ -21,7 +21,7 @@ class HttpErrorHandler {
             errorObj.message = error.message;
         } else {
             errorObj.name = error.message;
-            errorObj.message = error.name;
+            errorObj.message = error.message;
         }
         errorObj.stack = new Error().stack;
         errorObj.level = 'error'; // Default level
@@ -53,7 +53,10 @@ class HttpErrorHandler {
     static mount (response) {
         let error = {};
         error.name = response.status;
-        error.message = response.text() || 'Error with no message';
+        response.text().then((message) => {
+            error.message = message || 'Error with no message';
+            throw error;
+        });
         throw error;
     }
 }
