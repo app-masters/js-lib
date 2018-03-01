@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.14/1.1.15] - 2018-03-01
+### Changed
+- All the Notification.getToken() functions makes a different callback sending the current object: notification = {'platform': token}
+
 ## [1.1.12/1.1.13] - 2018-03-01
 ### Changed
 - HttpErrorHandler deals with text promises
@@ -36,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.0.24] - 2018-01-22
 ### Changed
-- Text.formatNumber and Text.formatReal added 
+- Text.formatNumber and Text.formatReal added
 
 ## [1.0.23] - 2018-01-10
 ### Changed
@@ -88,12 +92,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.8] - 2017-11-9
 ### Changed
 - AppBootstrap() changed to AppBootstrap.setup()
- 
+
 ## [1.0.3] / [1.0.7] - 2017-11-8
 ### Changed
 - AppBootstrap fixes
-- Http changed fetch to window.fetch.bind(window) - observe it 
- 
+- Http changed fetch to window.fetch.bind(window) - observe it
+
 ## [1.0.2] - 2017-11-7
 ### Added
 - AppBootstrap included (src and test)

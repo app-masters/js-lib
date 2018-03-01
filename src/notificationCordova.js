@@ -5,7 +5,13 @@ class NotificationCordova {
      * @param onFail
      */
     static getToken(onSuccess, onFail) {
-        window.FirebasePlugin.getToken(onSuccess, onFail);
+        window.FirebasePlugin.getToken((token) => {
+            const notification = {
+                type: 'cordova',
+                value: token
+            };
+            onSuccess(notification);
+        }, onFail);
     }
 
     /**

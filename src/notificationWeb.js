@@ -9,8 +9,13 @@ class NotificationWeb {
     static getToken(onSuccess, onFail) {
         // first request the permission. Then returns de token
         this.messaging.requestPermission().then(() => {
-            this.messaging.getToken()
-                .then(onSuccess)
+            this.messaging.getToken().then((token) => {
+                    const notification = {
+                        type: 'web',
+                        value: token
+                    };
+                    onSuccess(notification);
+                })
                 .catch(onFail);
         }).catch((err) => {
             throw err;
