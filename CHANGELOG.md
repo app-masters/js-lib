@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.19/1.1.19] - 2018-03-02
+### Changed
+- Minor fixes on the check token method and the http call
+
 ## [1.1.12/1.1.18] - 2018-03-01
 ### Changed
 - Added check token

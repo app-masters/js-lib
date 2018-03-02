@@ -1,4 +1,4 @@
-const Http = require('./http');
+import Http from './http';
 
 class NotificationWeb {
     /**
@@ -27,7 +27,7 @@ class NotificationWeb {
      * @param token
      */
     static setToken(token) {
-        Http.post('/notification/token/', token).then((user) => {});
+        Http.post('/notification/token/', token).then((user) => {console.log(user)}).catch((err) => console.log(err));
     }
 
     /**
@@ -36,7 +36,7 @@ class NotificationWeb {
      */
     static checkToken(user) {
         NotificationWeb.getToken((token) => {
-            if (!user.notification.web.token.includes(token.value)) {
+            if (!user.notification || !user.notification.web.token.includes(token.value)) {
                 NotificationWeb.setToken(token);
             }
         });
