@@ -27,7 +27,7 @@ class NotificationWeb {
      * @param token
      */
     static setToken(token) {
-        Http.post('/notification/token/', token).then((user) => {console.log(user)}).catch((err) => console.log(err));
+        Http.post('/notification/token/', token).then((user) => {window.localStorage.setItem('auth', JSON.stringify(user))}).catch((err) => console.log(err));
     }
 
     /**

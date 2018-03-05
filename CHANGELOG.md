@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.20/1.1.20] - 2018-03-05
+### Changed
+- Minor fixes on the check token method. Now the method sets the auth storage
+
 ## [1.1.19/1.1.19] - 2018-03-02
 ### Changed
 - Minor fixes on the check token method and the http call
