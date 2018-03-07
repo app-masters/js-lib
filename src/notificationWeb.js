@@ -7,19 +7,15 @@ class NotificationWeb {
      * @param onFail
      */
     static getToken(onSuccess, onFail) {
-        // first request the permission. Then returns de token
-        this.messaging.requestPermission().then(() => {
-            this.messaging.getToken().then((token) => {
-                const notification = {
-                    type: 'web',
-                    value: token
-                };
-                onSuccess(notification);
-            })
-                .catch(onFail);
-        }).catch((err) => {
-            throw err;
-        });
+        this.messaging.getToken().then((token) => {
+            const notification = {
+                type: 'web',
+                value: token
+            };
+            onSuccess(notification);
+        })
+            .catch(onFail);
+
     }
 
     /**
@@ -27,7 +23,9 @@ class NotificationWeb {
      * @param token
      */
     static setToken(token) {
-        Http.post('/notification/token/', token).then((user) => {window.localStorage.setItem('auth', JSON.stringify(user))}).catch((err) => console.log(err));
+        Http.post('/notification/token/', token).then((user) => {
+            window.localStorage.setItem('auth', JSON.stringify(user))
+        }).catch((err) => console.log(err));
     }
 
     /**
@@ -35,10 +33,15 @@ class NotificationWeb {
      * @param user
      */
     static checkToken(user) {
-        NotificationWeb.getToken((token) => {
-            if (!user.notification || !user.notification.web.token.includes(token.value)) {
-                NotificationWeb.setToken(token);
-            }
+        // first request the permission. Then gets the token
+        this.messaging.requestPermission().then(() => {
+            NotificationWeb.getToken((token) => {
+                if (!user.notification || !user.notification.web.token.includes(token.value)) {
+                    NotificationWeb.setToken(token);
+                }
+            });
+        }).catch((err) => {
+            throw err;
         });
     }
 
