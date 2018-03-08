@@ -190,7 +190,58 @@ class App extends Component {
 
 (callbacks are the same object used with AMActions.setup()).
 
+## Notification (web)
+### Service worker configuration
+- Create a file called 'firebase-messaging-sw.js' with the following content and put it on the public path of the project (generaly it is project-folder/public):
+```javascript
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
+firebase.initializeApp({
+    messagingSenderId: "1072711350296"
+});
+const Notifier = firebase.messaging();
+Notifier.setBackgroundMessageHandler(function(payload) {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    // Customize notification here
+    const notificationTitle = 'Background Message Title';
+    const notificationOptions = {
+        body: 'Background Message body.',
+        icon: '/firebase-logo.png'
+    };
+    return self.registration.showNotification(notificationTitle, notificationOptions);
+});
+```
+- Add the following line on the index.html before the closing tag: `</html>`
+```html
+<html>
+    <head>...</head>
+    <body>...</body>
+    <!-- add this script -->
+    <script src="https://www.gstatic.com/firebasejs/4.4.0/firebase.js"></script>
+</html>
+```
 
+### Firebase initialize and lib setup
+-  Initialize the firebase and then setup the notification lib
+```javascript
+// initializing the firebase
+firebase.initializeApp({
+    apiKey: '',
+    authDomain: '',
+    databaseURL: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: ''
+});
+// lib setup
+Notification.setup(firebase);
+Notification.getToken((token) => console.log('It has the token! Notification should work fine', token));
+Notification.handleMessage((message) => {console.log('message received -> ', message)}, console.error);
+```
+
+### Lib methods
+#### setup
+- Receives the config param (can be a firebase instance or config params to set the cordova firebase plugin for example), sets the device info (cordova, web, native) and finnaly sets the messaging (object used to make all the firebase calls).
 
 # Change Log
 
