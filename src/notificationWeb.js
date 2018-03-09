@@ -34,9 +34,13 @@ class NotificationWeb {
      */
     static checkToken(user) {
         // first request the permission. Then gets the token
+        console.log("checkToken");
         this.messaging.requestPermission().then(() => {
+            console.log("checkToken B");
             NotificationWeb.getToken((token) => {
+                console.log("checkToken C",token);
                 if (!user.notification || !user.notification.web.token.includes(token.value)) {
+                    console.log("checkToken D");
                     NotificationWeb.setToken(token);
                 }
             });
