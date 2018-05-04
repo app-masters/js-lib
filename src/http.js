@@ -79,6 +79,7 @@ class Http {
                 body = JSON.stringify(body);
                 Http.fetch(url, {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: Http.headers,
                     body: body
                 }).then(Http.checkStatus)
@@ -103,6 +104,7 @@ class Http {
                 body = JSON.stringify(body);
                 Http.fetch(url, {
                     method: 'PUT',
+                    credentials: 'same-origin',
                     headers: Http.headers,
                     body: body
                 }).then(Http.checkStatus)
@@ -125,6 +127,7 @@ class Http {
                 console.log(url + ' - GET');
                 Http.fetch(url, {
                     method: 'GET',
+                    credentials: 'same-origin',
                     headers: Http.headers
                 }).then(Http.checkStatus)
                     .then(Http.checkListener)
@@ -146,6 +149,7 @@ class Http {
                 console.log(url + ' - DOWNLOAD');
                 Http.fetch(url, {
                     method: 'GET',
+                    credentials: 'same-origin',
                     headers: Http.headers
                 }).then(Http.checkListener)
                     .then(Http.checkStatus)
@@ -166,6 +170,7 @@ class Http {
                 // console.log(headers);
                 Http.fetch(url, {
                     method: 'DELETE',
+                    credentials: 'same-origin',
                     headers: Http.headers,
                     body: body
                 }).then(Http.checkDeleteStatus)

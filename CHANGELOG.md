@@ -10,6 +10,9 @@ setHeaderParam
 ### Added
 - setHeaderParam method on HTTP
 
+## [1.1.24] - 2018-05-04
+- added "same origin" param on HTTP
+
 ## [1.1.22] - 2018-03-09
 ### Fixed
 - Fixing checkToken and setToken
