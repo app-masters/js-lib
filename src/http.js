@@ -23,6 +23,12 @@ class Http {
         Http.headers = {...Http.defaultHeaders, authorization: token}
     }
 
+    static setHeaderParam (key, value) {
+        let headers = Http.headers;
+        headers[key] = value;
+        Http.headers = headers;
+    }
+
     static setFetch (fetchMethod) {
         Http.fetch = fetchMethod;
     }
