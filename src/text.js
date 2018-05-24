@@ -147,6 +147,14 @@ class Text {
         });
     };
 
+    static slugify(str){
+        return (str && str.trim()) ? Text.replaceSpecial(str)
+        .toLowerCase()
+        .replace('.','')
+        .replace(/\s+/g, '-')
+        .replace(/\-\-+/g, '-') : ''
+    }
+
     static replaceSpecial(str) {
         let conversions = {};
         conversions['ae'] = 'ä|æ|ǽ';

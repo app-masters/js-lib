@@ -27,7 +27,7 @@ class Rollbar {
         if (this.mustSend())
             rollbar.info(message, payload, err, callback);
         else {
-            console.warn('Rollbar.log > Log whould be sent to rollbar');
+            console.warn('Rollbar.log > Log would be sent to rollbar');
             console.error(err,message,payload);
         }
     }
@@ -37,7 +37,7 @@ class Rollbar {
         if (this.mustSend())
             rollbar.info(message, payload, err, callback);
         else {
-            console.warn('Rollbar.info > Warning whould be sent to rollbar');
+            console.warn('Rollbar.info > Warning would be sent to rollbar');
             console.log(err,message,payload);
         }
     }
@@ -47,7 +47,7 @@ class Rollbar {
         if (this.mustSend())
             rollbar.debug(message, payload, err, callback);
         else {
-            console.warn('Rollbar.debug > Warning whould be sent to rollbar');
+            console.warn('Rollbar.debug > Warning would be sent to rollbar');
             console.log(err,message,payload);
         }
     }
@@ -57,7 +57,7 @@ class Rollbar {
         if (this.mustSend())
             rollbar.warning(message, payload, err, callback);
         else {
-            console.warn('Rollbar.warning > Warning whould be sent to rollbar');
+            console.warn('Rollbar.warning > Warning would be sent to rollbar');
             console.error(err,message,payload);
         }
     }
@@ -67,7 +67,7 @@ class Rollbar {
         if (this.mustSend())
             rollbar.error(err, message, payload, callback);
         else {
-            console.warn('Rollbar.error > Error whould be sent to rollbar');
+            console.warn('Rollbar.error > Error would be sent to rollbar');
             console.error(err);
         }
     }
@@ -77,7 +77,7 @@ class Rollbar {
         if (this.mustSend())
             rollbar.critical(err, message, payload, callback);
         else {
-            console.warn('Rollbar.critical > Error whould be sent to rollbar');
+            console.warn('Rollbar.critical > Error would be sent to rollbar');
             console.error(err);
         }
     }

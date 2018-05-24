@@ -178,7 +178,7 @@ export default function setup (accessToken, env, version, logOnDev, initializedC
             rollbarDependence.error(error);
             return false;
         } else {
-            console.warn('window.onerror > Error whould be sent to rollbar');
+            console.warn('window.onerror > Error would be sent to rollbar');
             console.error(error);
         }
     };
