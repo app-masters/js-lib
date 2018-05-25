@@ -152,7 +152,10 @@ class Text {
         .toLowerCase()
         .replace('.','')
         .replace(/\s+/g, '-')
-        .replace(/\-\-+/g, '-') : ''
+        .replace(/\-\-+/g, '-')
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '') : ''
     }
 
     static replaceSpecial(str) {
