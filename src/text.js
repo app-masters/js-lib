@@ -59,7 +59,7 @@ class Text {
      * @returns String
      */
     static nameSurname(name) {
-        name = name.trim();
+        name = Text.ucWords(name);
         if (!name) return '';
         return Text.firstName(name) + " " + Text.surName(name);
     }
@@ -71,7 +71,7 @@ class Text {
      * @param name
      */
     static firstName(name) {
-        name = name.trim();
+        name = Text.ucWords(name);
         if (!name) return '';
         let names = name.split(" ");
         if (names.length === 1) {
@@ -88,7 +88,7 @@ class Text {
      * @param name
      */
     static surName(name) {
-        name = name.trim();
+        name = Text.ucWords(name);
         if (!name) return '';
         let names = name.trim().split(" ");
         let sur = '';

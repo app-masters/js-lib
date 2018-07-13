@@ -154,6 +154,7 @@ class DateTime {
 
     static formatDateTime(date, space) {
         if (!date) return null;
+        if (!space) space = ' ';
         let result = '';
         result = DateTime.TSToDate(date) + space + DateTime.formatHour(date);
         // console.log(result);

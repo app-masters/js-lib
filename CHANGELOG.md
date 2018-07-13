@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 setHeaderParam
+
+## [1.1.27] - 2018-07-13
+### Changed
+- Fix to call ucWords on firstname
+
+
 ## [1.1.23] - 2018-05-04
 ### Added
 - setHeaderParam method on HTTP
