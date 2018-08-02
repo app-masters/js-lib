@@ -1,5 +1,5 @@
 class Text {
-    static shorten(text, maxLength, options) {
+    static shorten (text, maxLength, options) {
         if (text === undefined || text == null || text.length <= maxLength) {
             return text;
         }
@@ -36,12 +36,12 @@ class Text {
         return newText + suffix;
     }
 
-    static validateEmail(email) {
+    static validateEmail (email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
 
-    static ucWords(str) {
+    static ucWords (str) {
         str = str.trim();
         str = str.toLowerCase().replace(/^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g, function (letter) {
             return letter.toUpperCase();
@@ -58,10 +58,10 @@ class Text {
      * @param name
      * @returns String
      */
-    static nameSurname(name) {
+    static nameSurname (name) {
         name = Text.ucWords(name);
         if (!name) return '';
-        return Text.firstName(name) + " " + Text.surName(name);
+        return Text.firstName(name) + ' ' + Text.surName(name);
     }
 
     /**
@@ -70,10 +70,10 @@ class Text {
      * @returns String
      * @param name
      */
-    static firstName(name) {
+    static firstName (name) {
         name = Text.ucWords(name);
         if (!name) return '';
-        let names = name.split(" ");
+        let names = name.split(' ');
         if (names.length === 1) {
             return name;
         } else {
@@ -87,16 +87,16 @@ class Text {
      * @returns String
      * @param name
      */
-    static surName(name) {
+    static surName (name) {
         name = Text.ucWords(name);
         if (!name) return '';
-        let names = name.trim().split(" ");
+        let names = name.trim().split(' ');
         let sur = '';
         if (names.length >= 2) {
             sur = names[1];
         }
         if (names.length >= 3 && (['de', 'da', 'do', 'dos', 'das', 'del', 'dal', 'das']).indexOf(sur.toLowerCase()) > -1) {
-            sur = names[1] + " " + names[2];
+            sur = names[1] + ' ' + names[2];
         }
         return sur;
     }
@@ -114,15 +114,15 @@ class Text {
     //         return substr($this->nome, 0, 1);
     // }
 
-    static phoneMask(phone) {
-        phone = phone.replace(/\D/g, "");
-        phone = phone.replace(/^(\d{2})(\d)/g, "($1) $2");
-        phone = phone.replace(/(\d)(\d{4})$/, "$1-$2");
+    static phoneMask (phone) {
+        phone = phone.replace(/\D/g, '');
+        phone = phone.replace(/^(\d{2})(\d)/g, '($1) $2');
+        phone = phone.replace(/(\d)(\d{4})$/, '$1-$2');
         return phone;
     };
 
     // Format phone to (XX)XXXXX-XXXX or X...X-XXXX
-    static formatPhone(v) {
+    static formatPhone (v) {
         v = v.replace(/\D/g, '');
         if (v.length > 9) {
             v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
@@ -133,7 +133,7 @@ class Text {
         return v;
     }
 
-    static sortByKey(objArray, key) {
+    static sortByKey (objArray, key) {
         return objArray.sort((item, lastItem) => {
             const name = this.replaceSpecial(item[key].toUpperCase());
             const last = this.replaceSpecial(lastItem[key].toUpperCase());
@@ -147,18 +147,26 @@ class Text {
         });
     };
 
-    static slugify(str){
+    static slugify (str, replaceObj) {
+        // Optional parameter to replace defined characters: {'#': 'sharp', '.': 'dot'}
+        if (replaceObj) {
+            Object.keys(replaceObj).map(key => {
+                if (str.indexOf(key) > -1) {
+                    str.replace(key, replaceObj[key]);
+                }
+            });
+        }
         return (str && str.trim()) ? Text.replaceSpecial(str)
         .toLowerCase()
-        .replace('.','')
+        .replace('.', '')
         .replace(/\s+/g, '-')
         .replace(/\-\-+/g, '-')
         .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
         .replace(/^-+/, '')             // Trim - from start of text
-        .replace(/-+$/, '') : ''
+        .replace(/-+$/, '') : '';
     }
 
-    static replaceSpecial(str) {
+    static replaceSpecial (str) {
         let conversions = {};
         conversions['ae'] = 'ä|æ|ǽ';
         conversions['oe'] = 'ö|œ';
@@ -228,7 +236,7 @@ class Text {
      * @memberof Text
      * @author Max William
      */
-    static singularOrPlural(amount, singularWord, pluralWord, zeroUsesSingular = false) {
+    static singularOrPlural (amount, singularWord, pluralWord, zeroUsesSingular = false) {
         if (amount === 0) {
             return (zeroUsesSingular) ? singularWord : pluralWord;
         } else if (amount === 1) {
@@ -247,17 +255,17 @@ class Text {
      * @param {*} d pelo o que vai subistutir
      * @param {*} t o que vai substituir
      */
-    static formatNumber(n, prefix = '', sufix = '', c = 2, d = ',', t = '.') {
+    static formatNumber (n, prefix = '', sufix = '', c = 2, d = ',', t = '.') {
         c = isNaN(c = Math.abs(c)) ? 2 : c;
-        d = d === undefined ? "." : d;
-        t = t === undefined ? "," : t;
-        let s = n < 0 ? "-" : "";
+        d = d === undefined ? '.' : d;
+        t = t === undefined ? ',' : t;
+        let s = n < 0 ? '-' : '';
         let i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c)));
         let j = (j = i.length) > 3 ? j % 3 : 0;
-        return prefix + (s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "")) + sufix;
+        return prefix + (s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '')) + sufix;
     };
 
-    static formatReal(number, decimals = 2) {
+    static formatReal (number, decimals = 2) {
         return Text.formatNumber(number, 'R$', '', decimals);
     }
 
