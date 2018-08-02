@@ -152,7 +152,7 @@ class Text {
         if (replaceObj) {
             Object.keys(replaceObj).map(key => {
                 if (str.indexOf(key) > -1) {
-                    str.replace(key, replaceObj[key]);
+                    str = str.replace(key, replaceObj[key]);
                 }
             });
         }
