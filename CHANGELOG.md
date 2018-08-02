@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
-## [1.1.28/1.1.29] - 2018-08-02
+## [1.1.28/1.1.30] - 2018-08-02
 ### Changed
 - Text.slugify accept a replace object param 
 
