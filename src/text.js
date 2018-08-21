@@ -35,7 +35,15 @@ class Text {
         var newText = text.substr(0, cutIndex);
         return newText + suffix;
     }
-
+    /**
+     * Checks if a string represents a decimal number.
+     * @param {string} str String to be checked.
+     * @returns {boolean} Returns true if string is equivalent.
+     */
+    static isNormalInteger(str) {
+        var n = Math.floor(Number(str));
+        return n !== Infinity && String(n) === str && n >= 0;
+    }
     static validateEmail (email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
