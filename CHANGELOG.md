@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 setHeaderParam
 
 # [1.1.31] - 2018-08-21
+### Fixed
+- Fix on DateTime.relative
+
+# [1.1.31] - 2018-08-21
 ### Added
 - Text.isNormalInteger added, checks if a string is a number
 
