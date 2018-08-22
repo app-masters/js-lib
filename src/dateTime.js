@@ -73,7 +73,7 @@ class DateTime {
         let sameMonth = sameYear && date.getMonth() === now.getMonth();
         let sameDay = sameMonth && date.getDate() === now.getDate();
 
-        let days = sameDay ? 0 : -Math.floor(timeDiff / 86400);
+        let days = sameDay ? 0 : -Math.ceil(timeDiff / 86400);
         let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
         let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
         let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
