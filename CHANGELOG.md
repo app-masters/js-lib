@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
-# [1.1.31] - 2018-08-21
+# [1.1.4] - 2018-08-21
+### Fixed
+- Changed compiling to prepublishOnly and changed to Babel 7
+
+# [1.1.32] - 2018-08-21
 ### Fixed
 - Fix on DateTime.relative
 

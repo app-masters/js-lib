@@ -1,12 +1,12 @@
 {
     "name": "@app-masters/js-lib",
-    "version": "1.1.32",
+    "version": "1.1.4",
     "description": "JS lib",
     "main": "dist/index.js",
     "scripts": {
         "test": "jest",
-        "build": "rm -rf dist/ && babel src/ -d dist/",
-        "postinstall": "npm run build"
+        "build": "rm -rf dist/ && rm -rf node_modules/ && npm i && babel src/ -d dist/",
+        "prepublishOnly": "npm run build"
     },
     "repository": {
         "type": "git",
@@ -26,17 +26,17 @@
         "moment"
     ],
     "dependencies": {
-        "moment": "^2.19.1",
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.0",
-        "babel-loader": "^7.1.2",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.6.1",
-        "babel-plugin-transform-class-properties": "^6.24.1",
-        "babel-plugin-transform-es2015-classes": "^6.24.1",
-        "babel-plugin-transform-object-rest-spread": "^6.26.0"
+        "moment": "^2.19.1"
     },
     "devDependencies": {
+        "@babel/cli": "^7.0.0",
+        "@babel/core": "^7.0.0",
+        "@babel/plugin-proposal-class-properties": "^7.0.0",
+        "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+        "@babel/plugin-transform-classes": "^7.0.0",
+        "@babel/polyfill": "^7.0.0",
+        "@babel/preset-env": "^7.0.0",
+        "babel-core": "^7.0.0-bridge.0",
         "jest": "^21.2.1",
         "nock": "^9.0.27",
         "node-fetch": "^1.7.3"
