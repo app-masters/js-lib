@@ -1,6 +1,6 @@
 {
     "name": "@app-masters/js-lib",
-    "version": "1.1.42",
+    "version": "1.1.43",
     "description": "JS lib",
     "main": "dist/index.js",
     "scripts": {
@@ -23,12 +23,6 @@
         "url": "https://github.com/app-masters/js-lib/issues"
     },
     "homepage": "https://github.com/app-masters/js-lib#readme",
-    "bundleDependencies": [
-        "moment"
-    ],
-    "dependencies": {
-        "moment": "^2.19.1"
-    },
     "devDependencies": {
         "@babel/cli": "^7.0.0",
         "@babel/core": "^7.0.0",
@@ -41,5 +35,8 @@
         "jest": "^21.2.1",
         "nock": "^9.0.27",
         "node-fetch": "^1.7.3"
+    },
+    "peerDependencies": {
+        "moment": "^2.0.0"
     }
 }
