@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
+## [1.1.44] - 2018-11-07
+### Changed
+- Removing body from http.delete
+
 # [1.1.41] - 2018-08-21
 ### Fixed
 - Changed compiling to prepublishOnly and changed to Babel 7

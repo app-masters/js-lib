@@ -163,7 +163,7 @@ class Http {
         );
     }
 
-    static delete (uri, body) {
+    static delete (uri) {
         let url = Http.getUrl(uri);
         return new Promise((resolve, reject) => {
                 console.log(url + ' - DELETE');
@@ -171,8 +171,7 @@ class Http {
                 Http.fetch(url, {
                     method: 'DELETE',
                     credentials: 'same-origin',
-                    headers: Http.headers,
-                    body: body
+                    headers: Http.headers
                 }).then(Http.checkDeleteStatus)
                     .then(Http.checkListener)
                     .then(response => {
