@@ -1,11 +1,11 @@
-import Plural, {pluralize, config} from '../src/plural';
+import Plural, {pluralize, config} from '../dist/plural';
 
 describe('Importing the class', () => {
     it('Accepts a config Object', () => {
-        expect(Plural.config({
+        expect(typeof Plural.config({
             'reunião': 'reuniões',
             'amor': 'amores'
-        })).toBeTruthy();
+        })).toBe('object');
     });
 
     it('Pluralizes a normal word', () => {
@@ -13,7 +13,7 @@ describe('Importing the class', () => {
         expect(contatos).toEqual('contatos');
     })
 
-    it('Mantains first uppercase letter', () => {
+    it('Mantains first letter as uppercase', () => {
         const reunioes = Plural.pluralize('Reunião', 5);
         expect(reunioes).toEqual('Reuniões');
     })
@@ -32,7 +32,9 @@ describe('Importing only the functions', () => {
         expect(config).toBeTruthy();
     });
     it('Still has access to config', () => {
-        const reunioes = Plural.pluralize('reunião', 5);
+        let reunioes = pluralize('reunião', 5);
         expect(reunioes).toEqual('reuniões');
+        let amores = pluralize('Amor', 5);
+        expect(amores).toEqual('Amores');
     })
 })

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 setHeaderParam
 
 
+## [1.1.51] - 2018-11-07
+### Changed
+- Changed Plural into a singleton
+
 ## [1.1.50] - 2018-11-07
 ### Changed
 - Added Plural module
