@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
+
+## [1.1.50] - 2018-11-07
+### Changed
+- Added Plural module
+
 ## [1.1.44] - 2018-11-07
 ### Changed
 - Removing body from http.delete

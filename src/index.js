@@ -9,6 +9,7 @@ import AppBootstrap from './appBootstrap';
 import ObjHandler from './objHandler';
 import HttpErrorHandler from './httpErrorHandler';
 import Notification from './notification';
+import Plural from "./plural";
 
 export {
     Http,
@@ -21,5 +22,6 @@ export {
     AppBootstrap,
     ObjHandler,
     HttpErrorHandler,
-    Notification
+    Notification,
+    Plural
 };
