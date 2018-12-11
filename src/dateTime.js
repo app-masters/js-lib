@@ -11,7 +11,7 @@ class DateTime {
      * @param unique
      * @returns {*}
      */
-    static humanize(date, unique) {
+    static humanize (date, unique) {
 
         if (!date)
             return null;
@@ -22,9 +22,9 @@ class DateTime {
         timeDiff /= 1000;
 
         let days = Math.floor(timeDiff / 86400);
-        let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
-        let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
-        let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
+        let hours = Math.floor((timeDiff - (days * 86400)) / 3600);
+        let minutes = Math.floor((timeDiff - (days * 86400) - (hours * 3600)) / 60);
+        let secs = Math.floor((timeDiff - (days * 86400) - (hours * 3600) - (minutes * 60)));
 
         let result = '';
         if (unique === false) {
@@ -59,27 +59,25 @@ class DateTime {
         return result;
     }
 
-    static relative(date, showHour, shortenMonth, defaultMask) {
+    static relative (date, showHour, shortenMonth, defaultMask) {
         if (!date)
             return null;
-        date = new Date(date);
 
-        let now = new Date(Date.now());
-        let timeDiff = now - date;
+        const now = moment();
+        date = moment(date);
 
-        timeDiff /= 1000;
+        let days = now.diff(date, 'days');
+        let hours = now.diff(date, 'hours')
+        let minutes = now.diff(date, 'minutes')
+        let secs = now.diff(date, 'seconds')
 
-        let sameYear = date.getYear() === now.getYear();
-        let sameMonth = sameYear && date.getMonth() === now.getMonth();
-        let sameDay = sameMonth && date.getDate() === now.getDate();
-
-        let days = sameDay ? 0 : -Math.ceil(timeDiff / 86400);
-        let hours = Math.floor((timeDiff - (days * 86400 )) / 3600);
-        let minutes = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 )) / 60);
-        let secs = Math.floor((timeDiff - (days * 86400 ) - (hours * 3600 ) - (minutes * 60)));
+        let sameYear = now.diff(date, 'years') === 0;
+        let sameMonth = now.diff(date, 'months') === 0;
+        let sameDay = days === 0;
 
 
-        let hour = (showHour ? ' às ' + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) : '');
+        let day = date.format('DD/MM');
+        let hour = (showHour ? ' às ' + date.format('HH:mm') : '');
 
         // console.log("days", days);
         // console.log("hours", hours);
@@ -88,16 +86,16 @@ class DateTime {
 
         if (days === 0) {
             return 'Hoje' + hour;
-        } else if (days === 1) {
-            return 'Amanhã' + hour;
         } else if (days === -1) {
+            return 'Amanhã' + hour;
+        } else if (days === 1) {
             return 'Ontem' + hour;
         } else if (sameMonth) {
-            return "Dia " + ("0" + date.getDate()).slice(-2) + hour;
+            return "Dia " + day.split('/')[0] + hour;
         } else if (sameYear) {
-            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + hour;
+            return day + hour;
         } else if (!sameYear) {
-            return ("0" + date.getDate()).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear() + hour;
+            return date.format('DD/MM/YYYY') + hour;
         } else {
             console.log("days", days);
             console.log("hours", hours);
@@ -106,7 +104,7 @@ class DateTime {
         }
     }
 
-    static _sameDay(d1, d2) {
+    static _sameDay (d1, d2) {
         return d1.getFullYear() === d2.getFullYear() &&
             d1.getMonth() === d2.getMonth() &&
             d1.getDate() === d2.getDate();
@@ -116,7 +114,7 @@ class DateTime {
      * Return a formated hour "hh:mm:ss" from a seconds number
      * @param seconds
      */
-    static secondsToHour(seconds, round) {
+    static secondsToHour (seconds, round) {
         if (seconds === undefined || seconds === null) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
@@ -131,7 +129,7 @@ class DateTime {
      * Return a humanize hour like "1 dia" from a seconds number
      * @param seconds
      */
-    static secondsToHumanize(seconds) {
+    static secondsToHumanize (seconds) {
         if (seconds === undefined || seconds === null) return null;
         // console.log("seconds", seconds);
         let duration = moment.duration(seconds, 'seconds');
@@ -140,19 +138,19 @@ class DateTime {
         return formatted;
     }
 
-    static formatHour(value) {
+    static formatHour (value) {
         return moment(value).format('hh:mm');
         // return hora;
     }
 
-    static _addZero(i) {
+    static _addZero (i) {
         if (i < 10) {
             i = "0" + i;
         }
         return i;
     }
 
-    static formatDateTime(date, space) {
+    static formatDateTime (date, space) {
         if (!date) return null;
         if (!space) space = ' ';
         let result = '';
@@ -161,8 +159,8 @@ class DateTime {
         return result;
     }
 
-// Função que recebe data DD-MM-YYYY e devolve YYYY-MM-DD
-    static DateToISO(dateStr) {
+    // Função que recebe data DD-MM-YYYY e devolve YYYY-MM-DD
+    static DateToISO (dateStr) {
         if (dateStr !== '') {
             return dateStr.split('/').reverse().join('/');
         } else {
@@ -170,8 +168,8 @@ class DateTime {
         }
     }
 
-// Função que recebe data DD-MM-YYYY e devolve UNIX TimeStamp
-    static DateToTS(dateStr) {
+    // Função que recebe data DD-MM-YYYY e devolve UNIX TimeStamp
+    static DateToTS (dateStr) {
         if (dateStr !== '') {
             const ISODate = DateTime.DateToISO(dateStr);
             const TSDate = (new Date(ISODate));
@@ -182,8 +180,8 @@ class DateTime {
         }
     }
 
-// Função que recebe UNIX TimeStamp e devolve data DD-MM-YYYY
-    static TSToDate(TSValue) {
+    // Função que recebe UNIX TimeStamp e devolve data DD-MM-YYYY
+    static TSToDate (TSValue) {
         if (TSValue !== '') {
             const fullDate = (new Date(TSValue));
             return (
@@ -196,8 +194,8 @@ class DateTime {
         }
     }
 
-// Função que recebe frequencia e converte para intervalo de TimeStamp
-    static freqToTS(freqValue, daily) {
+    // Função que recebe frequencia e converte para intervalo de TimeStamp
+    static freqToTS (freqValue, daily) {
         if (daily) {
             return freqValue * 3600; // 60 minutos * 60 segundos
         } else {
@@ -205,8 +203,8 @@ class DateTime {
         }
     }
 
-// Função que recebe data HH:MM e devolve UNIX TimeStamp
-    static TimeToTS(TimeStr) {
+    // Função que recebe data HH:MM e devolve UNIX TimeStamp
+    static TimeToTS (TimeStr) {
         if (TimeStr !== '') {
             const timeVec = TimeStr.split(':');
             return (timeVec[0] * 3600 + timeVec[1] * 60);
@@ -215,7 +213,7 @@ class DateTime {
         }
     }
 
-    static TSToTime(TSValue) {
+    static TSToTime (TSValue) {
         if (TSValue !== '') {
             let minutes = Math.floor((TSValue % 3600) / 60);
             let hours = Math.floor(TSValue / 3600);
@@ -227,7 +225,7 @@ class DateTime {
         }
     }
 
-    static RelativeDate(TimeStr) {
+    static RelativeDate (TimeStr) {
         const dueDate = moment(TimeStr, 'DD-MM-YYYY');
         if (dueDate.diff(moment(), 'days') <= 6) {
             const date = dueDate.calendar().split(' às')[0];
@@ -237,7 +235,7 @@ class DateTime {
         }
     }
 
-    static TSToFreqString(TimeStr) {
+    static TSToFreqString (TimeStr) {
         if (TimeStr <= 86400) {
             return 'Diário';
         } else if (TimeStr === 604800) {
