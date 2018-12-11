@@ -64,31 +64,27 @@ class DateTime {
             return null;
 
         const now = moment();
+        let today = now.format('DD-MM-YYYY');
+        let tomorrow = moment().add(1,'days').format('DD-MM-YYYY');
+        let yesterday = moment().subtract(1, 'days').format('DD-MM-YYYY');
         date = moment(date);
 
-        let days = now.diff(date, 'days');
-        let hours = now.diff(date, 'hours')
-        let minutes = now.diff(date, 'minutes')
-        let secs = now.diff(date, 'seconds')
+        const dateS = date.format('DD-MM-YYYY');
+       
+        today = today === dateS;
+        tomorrow = tomorrow === dateS;
+        yesterday = yesterday === dateS;
 
-        let sameYear = now.diff(date, 'years') === 0;
-        let sameMonth = now.diff(date, 'months') === 0;
-        let sameDay = days === 0;
+        const sameMonth = now.format('MM/YYYY') === date.format('MM/YYYY');
+        const sameYear = now.format('YYYY') === date.format('YYYY');
+        const day = date.format('DD/MM');
+        const hour = showHour ? ' às ' +  date.format('HH:mm') : ''
 
-
-        let day = date.format('DD/MM');
-        let hour = (showHour ? ' às ' + date.format('HH:mm') : '');
-
-        // console.log("days", days);
-        // console.log("hours", hours);
-        // console.log("minutes", minutes);
-        // console.log("secs", secs);
-
-        if (days === 0) {
+        if (today) {
             return 'Hoje' + hour;
-        } else if (days === -1) {
+        } else if (tomorrow) {
             return 'Amanhã' + hour;
-        } else if (days === 1) {
+        } else if (yesterday) {
             return 'Ontem' + hour;
         } else if (sameMonth) {
             return "Dia " + day.split('/')[0] + hour;
