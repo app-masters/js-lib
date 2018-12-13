@@ -59,7 +59,7 @@ class DateTime {
         return result;
     }
 
-    static relative (date, showHour, shortenMonth, defaultMask) {
+    static relative (date, showHour, dateFormat) {
         if (!date)
             return null;
 
@@ -67,7 +67,7 @@ class DateTime {
         let today = now.format('DD-MM-YYYY');
         let tomorrow = moment().add(1,'days').format('DD-MM-YYYY');
         let yesterday = moment().subtract(1, 'days').format('DD-MM-YYYY');
-        date = moment(date);
+        date = moment(date, dateFormat);
 
         const dateS = date.format('DD-MM-YYYY');
        
