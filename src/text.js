@@ -277,6 +277,19 @@ class Text {
         return Text.formatNumber(number, 'R$', '', decimals);
     }
 
+    /**
+     * Show meters when distance is less than 1km
+     * @param distance
+     * @returns {string}
+     */
+    static humanizeDistance (distance) {
+        if (distance < 1) {
+            return (1000 * distance).toFixed(0) + 'm';
+        } else {
+            return (distance).toFixed(1).replace('.', ',') + 'km';
+        }
+    }
+
 }
 
 export default Text;

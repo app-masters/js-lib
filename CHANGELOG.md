@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
+## [1.1.55] - 2018-11-07
+### Changed
+- Added humanizeDistance on Text
+
 ## [1.1.51] - 2018-11-07
 ### Changed
 - Changed [DateTime.relative](/src/dateTime.js) to use `moment`
