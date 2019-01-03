@@ -23,7 +23,6 @@ class LaravelErrorHandler {
                 body.error = body.error.map(error => error.replace(/ *\[[^)]*\] */g, ''));
             }
             errorObj.body = body;
-            errorObj.level = 'error';
         } else {
             // Another error (maybe a browser error)
             errorObj.body = {error: [errorObj.remote]};
@@ -34,9 +33,7 @@ class LaravelErrorHandler {
 
     static mount (response) {
         let error = {};
-        error.headers = response.headers;
         error.status = response.status;
-        error.statusText = response.statusText;
         error.response = response;
         error.level = null;
         return response.text().then((data) => {

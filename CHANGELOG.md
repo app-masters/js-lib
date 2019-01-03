@@ -7,13 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
-## [1.2.0/1.2.3] - 2019-01-03
+## [1.2.0/1.2.4] - 2019-01-03
 ### Added
 - LaravelErrorHandler for deal with the new error standards
 ### Changed
 - LaravelErrorHandler handling string and object payload
 - Accepting larger range of status
 - Removing string message from error
+- Removing useless fields from error
 
 ## [1.1.55] - 2018-11-07
 ### Changed
