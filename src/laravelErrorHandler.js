@@ -1,6 +1,11 @@
 import Rollbar from './rollbar';
 
 class LaravelErrorHandler {
+    /**
+     * Before send error to the view, change it and send it to Rollbar
+     * @param error
+     * @returns {*}
+     */
     static handle (error) {
         let errorObj =  LaravelErrorHandler.errorLibrary(error);
 
@@ -11,6 +16,11 @@ class LaravelErrorHandler {
         return errorObj;
     };
 
+    /**
+     * Change errorObj to match view needs for each status code or property
+     * @param errorObj
+     * @returns {*}
+     */
     static errorLibrary(errorObj){
         if (errorObj.status === 405 || errorObj.status >= 500){
             // Server error, don't show original
@@ -32,6 +42,11 @@ class LaravelErrorHandler {
         return errorObj;
     }
 
+    /**
+     * Generate error object from the API response
+     * @param response
+     * @returns {Promise<T | never>}
+     */
     static mount (response) {
         let error = {};
         error.status = response.status;
