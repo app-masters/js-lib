@@ -18,7 +18,11 @@ class LaravelErrorHandler {
             errorObj.level = 'critical';
         } else if (errorObj.status >= 400 && errorObj.status <= 430) {
             // Payload error
-            errorObj.body = JSON.parse(errorObj.remote);
+            const body = JSON.parse(errorObj.remote);
+            if (body.error) {
+                body.error = body.error.map(error => error.replace(/ *\[[^)]*\] */g, ''));
+            }
+            errorObj.body = body;
             errorObj.level = 'error';
         } else {
             // Another error (maybe a browser error)
