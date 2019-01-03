@@ -9,6 +9,7 @@ class LaravelErrorHandler {
     static handle (error) {
         let errorObj =  LaravelErrorHandler.errorLibrary(error);
 
+        // If it's a valid Rollbar level, call specific method
         if (errorObj.level !== 'user'){
             Rollbar[errorObj.level](errorObj);
         }
@@ -50,7 +51,7 @@ class LaravelErrorHandler {
     static mount (response) {
         let error = {};
         error.status = response.status;
-        error.response = response;
+        error.response = response; // Save original response
         error.level = null;
         return response.text().then((data) => {
             error.remote = data;
