@@ -16,7 +16,7 @@ class LaravelErrorHandler {
             // Server error, don't show
             errorObj.body = {error: ['Falha no servidor']};
             errorObj.level = 'critical';
-        } else if (errorObj.status >= 400 && errorObj.status <= 420) {
+        } else if (errorObj.status >= 400 && errorObj.status <= 430) {
             // Payload error
             errorObj.body = JSON.parse(errorObj.remote);
             errorObj.level = 'error';
