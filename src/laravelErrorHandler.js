@@ -1,12 +1,8 @@
-import Rollbar from "./rollbar";
+import Rollbar from './rollbar';
 
 class LaravelErrorHandler {
     static handle (error) {
-        let errorObj =  error;
-        errorObj.remote = error; // Keep the original error on payload
-        errorObj.level = null; // Default level
-
-        errorObj = LaravelErrorHandler.errorLibrary(errorObj);
+        let errorObj =  LaravelErrorHandler.errorLibrary(error);
 
         if (errorObj.level){
             Rollbar[errorObj.level](errorObj);
@@ -16,13 +12,17 @@ class LaravelErrorHandler {
     };
 
     static errorLibrary(errorObj){
-        if (errorObj.status >= 500){
+        if (errorObj.status === 405 || errorObj.status >= 500){
+            // Server error, don't show
             errorObj.body = {error: ['Falha no servidor']};
             errorObj.level = 'critical';
-        } else if (isNaN(errorObj.status)) {
-            if(!errorObj.body || !errorObj.body.error){
-                errorObj.body = {error: [errorObj.body]}
-            }
+        } else if (errorObj.status >= 400 && errorObj.status <= 420) {
+            // Payload error
+            errorObj.body = JSON.parse(errorObj.remote);
+            errorObj.level = 'error';
+        } else {
+            // Another error (maybe a browser error)
+            errorObj.body = {error: [errorObj.remote]};
             errorObj.level = 'error';
         }
         return errorObj;
@@ -33,8 +33,10 @@ class LaravelErrorHandler {
         error.headers = response.headers;
         error.status = response.status;
         error.statusText = response.statusText;
-        return response.json().then((data) => {
-            error.body = data || {error: ['Ocorreu um erro inesperado']};
+        error.response = response;
+        error.level = null;
+        return response.text().then((data) => {
+            error.remote = data;
             throw error;
         });
     }
