@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
+## [1.2.0] - 2019-01-03
+### Added
+- LaravelErrorHandler for deal with the new error standards
+
 ## [1.1.55] - 2018-11-07
 ### Changed
 - Added humanizeDistance on Text

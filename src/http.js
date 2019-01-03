@@ -1,4 +1,4 @@
-import ErrorHandler from './httpErrorHandler';
+import HttpErrorHandler from './httpErrorHandler';
 
 class Http {
     static setup (version, client, env, contentType) {
@@ -89,7 +89,7 @@ class Http {
                         console.log('POST > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = ErrorHandler.handle(error);
+                    error = Http.errorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -114,7 +114,7 @@ class Http {
                         console.log('PUT > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = ErrorHandler.handle(error);
+                    error = Http.errorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -136,7 +136,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = ErrorHandler.handle(error);
+                    error = Http.errorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -156,7 +156,7 @@ class Http {
                     .then(response => {
                         resolve(response);
                     }).catch(error => {
-                    error = ErrorHandler.handle(error);
+                    error = Http.errorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -172,13 +172,13 @@ class Http {
                     method: 'DELETE',
                     credentials: 'same-origin',
                     headers: Http.headers
-                }).then(Http.checkDeleteStatus)
+                }).then(Http.checkStatus)
                     .then(Http.checkListener)
                     .then(response => {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = ErrorHandler.handle(error);
+                    error = Http.errorHandler.handle(error);
                     reject(error);
                 });
             }
@@ -187,27 +187,18 @@ class Http {
 
     static checkStatus (response) {
         // console.log('checkStatus');
-        if (response.status === 200 || response.status === 201) { // 200 - OK || 201 - Created
+        if (response.status >= 200 && response.status <= 210) { // 200 - OK || 201 - Created
             return response;
         } else {
-            return ErrorHandler.mount(response);
+            return Http.errorHandler.mount(response);
         }
     }
 
     static checkListener (response) {
-        // console.log("checkListener",requestListener);
         if (Http.requestListener) {
             Http.requestListener(response);
         }
         return response;
-    }
-
-    static checkDeleteStatus (response) {
-        if (response.status === 200 || response.status === 204) {
-            return response;
-        } else {
-            return ErrorHandler.mount(response);
-        }
     }
 
     static parseJSON (response) {
@@ -218,6 +209,10 @@ class Http {
     static setRequestListener (callback) {
         Http.requestListener = callback;
     }
+
+    static setErrorHandler (ErrorHandlerClass) {
+        Http.errorHandler = ErrorHandlerClass;
+    }
 }
 
 Http.headers = {};
@@ -226,6 +221,7 @@ Http.authorization = '';
 Http.baseURL = '';
 Http.params = {};
 Http.requestListener = null;
+Http.errorHandler = HttpErrorHandler;
 Http.fetch = typeof fetch !== 'undefined' ? window.fetch.bind(window) : null;
 
 export default Http;

@@ -9,7 +9,8 @@ import AppBootstrap from './appBootstrap';
 import ObjHandler from './objHandler';
 import HttpErrorHandler from './httpErrorHandler';
 import Notification from './notification';
-import Plural from "./plural";
+import Plural from './plural';
+import LaravelErrorHandler from './laravelErrorHandler';
 
 export {
     Http,
@@ -23,5 +24,6 @@ export {
     ObjHandler,
     HttpErrorHandler,
     Notification,
-    Plural
+    Plural,
+    LaravelErrorHandler
 };

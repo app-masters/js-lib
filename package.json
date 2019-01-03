@@ -1,6 +1,6 @@
 {
     "name": "@app-masters/js-lib",
-    "version": "1.1.55",
+    "version": "1.2.0",
     "description": "JS lib",
     "main": "dist/index.js",
     "scripts": {

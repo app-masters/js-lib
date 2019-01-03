@@ -9,6 +9,7 @@ import AppBootstrap from './dist/appBootstrap';
 import ObjHandler from './dist/objHandler';
 import HttpErrorHandler from './dist/httpErrorHandler';
 import Notification from './dist/notification';
+import LaravelErrorHandler from './dist/laravelErrorHandler';
 
 export {
     Http,
@@ -21,5 +22,6 @@ export {
     AppBootstrap,
     ObjHandler,
     HttpErrorHandler,
-    Notification
+    Notification,
+    LaravelErrorHandler
 };
