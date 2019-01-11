@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
+## [1.2.6] - 2019-01-11
+### Added
+- customEnv on appBoostrap
+
 ## [1.2.0/1.2.5] - 2019-01-03
 ### Added
 - LaravelErrorHandler for deal with the new error standards

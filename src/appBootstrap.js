@@ -4,7 +4,7 @@ import { Http, VersionCheck, Rollbar, HttpErrorHandler, Notification } from './i
 
 class AppBootstrap {
 
-    static setup (client, packag, envs, storage, callback) {
+    static setup (client, packag, envs, storage, callback, customEnv) {
 
         // Validate parans
         if (!client || ['web', 'mobile', 'admin'].indexOf(client) < 0)
@@ -17,7 +17,7 @@ class AppBootstrap {
         AppBootstrap.callbacks = callback;
 
         // 1 - Decide env
-        let nodeEnv = process.env.NODE_ENV;
+        let nodeEnv = customEnv || process.env.NODE_ENV; // If no customEnv defined, use NODE_ENV
         let version = packag.version;
         let firebase;
         let buildTime;
