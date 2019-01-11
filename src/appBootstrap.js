@@ -17,7 +17,14 @@ class AppBootstrap {
         AppBootstrap.callbacks = callback;
 
         // 1 - Decide env
-        let nodeEnv = customEnv || process.env.NODE_ENV; // If no customEnv defined, use NODE_ENV
+        let nodeEnv = null;
+        if (customEnv) {
+            nodeEnv = customEnv;
+            console.log('Custom environment provided: ', customEnv);
+        } else {
+            nodeEnv = process.env.NODE_ENV;
+            console.log('Default environment defined: ', process.env.NODE_ENV);
+        }
         let version = packag.version;
         let firebase;
         let buildTime;
@@ -48,7 +55,7 @@ class AppBootstrap {
 
         // 2 - Rollbar / bugsnag
         if (config.rollbarToken && client !== 'mobile') {
-            Rollbar.setup(config.rollbarToken, client + '_' + nodeEnv, process.env.APP_VERSION);
+            Rollbar.setup(config.rollbarToken, client + '_' + nodeEnv, process.env.APP_VERSION, nodeEnv);
         } else if (client === 'mobile') {
             // Config of rollbar for native
             console.log('AppBootstrap is not configuring the Rollbar, please check if other source is configuring it.');

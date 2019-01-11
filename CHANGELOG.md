@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 setHeaderParam
 
-## [1.2.6] - 2019-01-11
+## [1.2.6/1.2.7] - 2019-01-11
 ### Added
 - customEnv on appBoostrap
+### Changed
+- customEnv log
 
 ## [1.2.0/1.2.5] - 2019-01-03
 ### Added

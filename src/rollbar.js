@@ -10,9 +10,9 @@ class Rollbar {
     static logOnDev;
     static env;
 
-    static setup(accessToken, env, version, logOnDev) {
+    static setup(accessToken, env, version, logOnDev, nodeEnv) {
         Rollbar.logOnDev = logOnDev===true;
-        Rollbar.env = process.env.NODE_ENV;
+        Rollbar.env = nodeEnv;
         if (Rollbar.env ==='production' || Rollbar.logOnDev){
             rbar(accessToken, env, version, logOnDev===true, (instance) => {
                 // console.log("rollbar setup done");
