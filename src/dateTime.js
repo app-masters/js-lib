@@ -12,7 +12,6 @@ class DateTime {
      * @returns {*}
      */
     static humanize (date, unique) {
-
         if (!date)
             return null;
 
@@ -32,13 +31,13 @@ class DateTime {
             if (days === 1)
                 result.push("1 dia");
             if (days > 1)
-                result.push(days + " dias");
+                result.push(days + (days > 1 ? " dias" : " dia"));
             if (hours > 0)
-                result.push(hours + " horas");
+                result.push(hours + (hours > 1 ? " horas" : " hora"));
             if (minutes > 0)
-                result.push(minutes + " minutos");
+                result.push(minutes + (minutes > 1 ? " minutos" : " minuto"));
             if (secs > 0)
-                result.push(secs + " segundos");
+                result.push(secs + (secs > 1 ? " segundos" : " segundo"));
             result = result.join(", ");
         } else {
             if (days === 1)
@@ -46,11 +45,11 @@ class DateTime {
             else if (days > 1)
                 result = days + " dias";
             else if (hours > 0)
-                result += hours + " horas";
+                result += hours + (hours > 1 ? " horas" : " hora");
             else if (minutes > 0)
-                result += minutes + " minutos";
+                result += minutes + (minutes > 1 ? " minutos" : " minuto");
             else if (secs > 0)
-                result += secs + " segundos";
+                result += secs + (secs > 1 ? " segundos" : " segundo");
             else
                 result = "agora";
         }
