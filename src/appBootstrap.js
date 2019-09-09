@@ -1,14 +1,16 @@
 import * as moment from 'moment';
 
-import { Http, VersionCheck, Rollbar, HttpErrorHandler, Notification } from './index';
+import {Http, VersionCheck, Rollbar, HttpErrorHandler, Notification} from './index';
 
 class AppBootstrap {
 
-    static setup (client, version, envs, storage, callback, customEnv) {
+    static setup(client, version, envs, storage, callback, customEnv) {
 
         // Validate parans
         if (!client || ['web', 'mobile', 'admin'].indexOf(client) < 0)
             throw ('Unrecognized or undefined client: ' + client);
+        if (typeof version === "object")
+            throw ('version param should be just a string, like "1.2.3"');
         // @todo Validate envs
         // @todo Validate storage
         if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion || !callback.onUncaughtError)
@@ -20,7 +22,7 @@ class AppBootstrap {
         let nodeEnv = null;
         if (customEnv) {
             nodeEnv = customEnv;
-            logs.push('Custom environment provided: '+ customEnv);
+            logs.push('Custom environment provided: ' + customEnv);
         }
         let firebase;
         let buildTime;
@@ -29,7 +31,7 @@ class AppBootstrap {
             firebase = process.env.FIREBASE && process.env.FIREBASE === true;
             buildTime = new Date(process.env.BUILD_TIME);
             buildTimeString = buildTime.toDateString() + ' ' + buildTime.toTimeString();
-            logs.push('CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version + ' - RELEASE DATE: ' + process.env.APP_RELEASE + ' - BUILD_TIME: '  + buildTimeString + ' - FIREBASE: ' + firebase);
+            logs.push('CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version + ' - RELEASE DATE: ' + process.env.APP_RELEASE + ' - BUILD_TIME: ' + buildTimeString + ' - FIREBASE: ' + firebase);
         } else if (__DEV__ !== undefined) {
             logs.push('MOBILE CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version);
         }
@@ -103,26 +105,26 @@ class AppBootstrap {
         }
 
         // 8 - Notification
-        if(config.notification){
+        if (config.notification) {
             Notification.setup(config.notification);
         }
         return true;
 
     }
 
-    static onUncaughtError () {
+    static onUncaughtError() {
         return AppBootstrap.callbacks.onUncaughtError;
     }
 
-    static onMinVersionNotSatifies () {
+    static onMinVersionNotSatifies() {
         return AppBootstrap.callbacks.onMinVersionNotSatifies;
     }
 
-    static onNewVersion () {
+    static onNewVersion() {
         return AppBootstrap.callbacks.onNewVersion;
     }
 
-    static getConfig () {
+    static getConfig() {
         return AppBootstrap.config;
     }
 }
