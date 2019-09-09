@@ -23,6 +23,8 @@ class AppBootstrap {
         if (customEnv) {
             nodeEnv = customEnv;
             logs.push('Custom environment provided: ' + customEnv);
+        } else {
+            nodeEnv = process.env.NODE_ENV;
         }
         let firebase;
         let buildTime;
@@ -36,7 +38,6 @@ class AppBootstrap {
             logs.push('MOBILE CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version);
         }
 
-        // console.log(envs);
         let config;
         if (nodeEnv === 'development' && firebase) {
             config = envs['development_firebase'];
@@ -45,6 +46,7 @@ class AppBootstrap {
             config = envs[nodeEnv];
         }
 
+        console.log(logs);
         console.log('Loaded config', config);
         if (config === undefined) {
             throw new Error('No config for NODE_ENV "' + nodeEnv + '"');
