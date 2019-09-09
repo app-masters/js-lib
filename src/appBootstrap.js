@@ -4,28 +4,24 @@ import { Http, VersionCheck, Rollbar, HttpErrorHandler, Notification } from './i
 
 class AppBootstrap {
 
-    static setup (client, packag, envs, storage, callback, customEnv) {
+    static setup (client, version, envs, storage, callback, customEnv) {
 
         // Validate parans
         if (!client || ['web', 'mobile', 'admin'].indexOf(client) < 0)
             throw ('Unrecognized or undefined client: ' + client);
         // @todo Validate envs
-        // @todo Validate packag
         // @todo Validate storage
         if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion || !callback.onUncaughtError)
             throw ('You must pass callback parameter to AppBootstrap.setup, with onMinVersionNotSatifies, onNewVersion and onUncaughtError methods.');
         AppBootstrap.callbacks = callback;
 
+        const logs = [];
         // 1 - Decide env
         let nodeEnv = null;
         if (customEnv) {
             nodeEnv = customEnv;
-            console.log('Custom environment provided: ', customEnv);
-        } else {
-            nodeEnv = process.env.NODE_ENV;
-            console.log('Default environment defined: ', process.env.NODE_ENV);
+            logs.push('Custom environment provided: '+ customEnv);
         }
-        let version = packag.version;
         let firebase;
         let buildTime;
         let buildTimeString;
@@ -33,16 +29,16 @@ class AppBootstrap {
             firebase = process.env.FIREBASE && process.env.FIREBASE === true;
             buildTime = new Date(process.env.BUILD_TIME);
             buildTimeString = buildTime.toDateString() + ' ' + buildTime.toTimeString();
-            console.log('CLIENT:' + client + ' - ENV:' + nodeEnv + ' - VERSION:' + version + ' - RELEASE DATE:' + process.env.APP_RELEASE + ' - BUILD_TIME:' + buildTimeString + ' - FIREBASE:' + firebase);
+            logs.push('CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version + ' - RELEASE DATE: ' + process.env.APP_RELEASE + ' - BUILD_TIME: '  + buildTimeString + ' - FIREBASE: ' + firebase);
         } else if (__DEV__ !== undefined) {
-            console.log('MOBILE CLIENT:' + client + ' - ENV:' + nodeEnv + ' - VERSION:' + version);
+            logs.push('MOBILE CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version);
         }
 
         // console.log(envs);
         let config;
         if (nodeEnv === 'development' && firebase) {
             config = envs['development_firebase'];
-            console.log('> firebase development <');
+            // logs.push('> firebase development <');
         } else {
             config = envs[nodeEnv];
         }
@@ -58,20 +54,20 @@ class AppBootstrap {
             Rollbar.setup(config.rollbarToken, client + '_' + nodeEnv, process.env.APP_VERSION, nodeEnv);
         } else if (client === 'mobile') {
             // Config of rollbar for native
-            console.log('AppBootstrap is not configuring the Rollbar, please check if other source is configuring it.');
+            // console.log('AppBootstrap is not configuring the Rollbar, please check if other source is configuring it.');
         } else if (nodeEnv === 'development') {
-            console.warn('Rollbar not set on dev. It\'s ok.');
+            // console.warn('Rollbar not set on dev. It\'s ok.');
         } else {
-            throw new Error('You must have Rollbar or bugsnag on your app.');
+            throw new Error('You must have Rollbar on your app.');
         }
 
         // 3 - Http
         Http.setBaseURL(config.baseUrl);
-        Http.setup(packag.version, client, nodeEnv, 'application/json');
+        Http.setup(version, client, nodeEnv, 'application/json');
         HttpErrorHandler.setup(callback);
 
         // 4 -  Moment
-        moment.updateLocale('pt-br', require('moment/locale/pt-br'));
+        moment.defineLocale('pt-br', require('moment/locale/pt-br'));
 
         // 5 - Version Check
         VersionCheck.setCurrentVersion(client, version);
