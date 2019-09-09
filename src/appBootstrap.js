@@ -1,6 +1,10 @@
 import * as moment from 'moment';
 
-import {Http, VersionCheck, Rollbar, HttpErrorHandler, Notification} from './index';
+import Http from './http';
+import Rollbar from './rollbar';
+import VersionCheck from './version';
+import HttpErrorHandler from './httpErrorHandler';
+import Notification from './notification';
 
 class AppBootstrap {
 
