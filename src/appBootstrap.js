@@ -105,6 +105,8 @@ class AppBootstrap {
                 };
                 console.debug = function () {
                 };
+                console.clear = function () {
+                };
             }
 
             console.disableYellowBox = true;
