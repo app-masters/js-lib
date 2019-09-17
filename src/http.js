@@ -89,7 +89,7 @@ class Http {
                         console.log('POST > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = Http.errorHandler.handle(error);
+                    error = Http.errorHandler.handle(error, "POST", url, body);
                     reject(error);
                 });
             }
@@ -114,7 +114,7 @@ class Http {
                         console.log('PUT > ' + uri + ' > response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = Http.errorHandler.handle(error);
+                    error = Http.errorHandler.handle(error, "PUT", url, body);
                     reject(error);
                 });
             }
@@ -136,7 +136,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = Http.errorHandler.handle(error);
+                    error = Http.errorHandler.handle(error, "GET", url);
                     reject(error);
                 });
             }
@@ -156,7 +156,7 @@ class Http {
                     .then(response => {
                         resolve(response);
                     }).catch(error => {
-                    error = Http.errorHandler.handle(error);
+                    error = Http.errorHandler.handle(error, "GET(download)", url);
                     reject(error);
                 });
             }
@@ -178,7 +178,7 @@ class Http {
                         console.log(url + ' response', response);
                         resolve(response);
                     }).catch(error => {
-                    error = Http.errorHandler.handle(error);
+                    error = Http.errorHandler.handle(error, "DELETE", url);
                     reject(error);
                 });
             }

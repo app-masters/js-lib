@@ -12,7 +12,7 @@ class HttpErrorHandler {
         }
     }
 
-    static handle (error) {
+    static handle (error, method, url, body) {
         const errorObj = {payload: error}; // Keep the original error on payload
 
         // TypeError can have different meanings, so check the message
@@ -26,6 +26,10 @@ class HttpErrorHandler {
         errorObj.stack = new Error().stack;
         errorObj.level = 'error'; // Default level
 
+        errorObj.method = method;
+        errorObj.url = url;
+        errorObj.body = body;
+
         const handler = errorLibrary[errorObj.name];
         if (handler) {
             if (handler.message) {
@@ -33,6 +37,7 @@ class HttpErrorHandler {
             }
             if (handler.callback && HttpErrorHandler.callback[handler.callback]) {
                 HttpErrorHandler.callback[handler.callback](errorObj);
+                errorObj.sentToAnotherErrorHandler = true;
             }
             if (handler.level === null) {
                 return errorObj;
