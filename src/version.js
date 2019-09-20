@@ -58,9 +58,15 @@ export default class VersionCheck {
 
         Http.setRequestListener(req => {
             if (!VersionCheck.minVersionSatisfies(req)) {
-                let betaFinished = VersionCheck.currentClientVersion[0] === '0' && minActualClientVersion[0] !== '0';
-                let isOnBeta = VersionCheck.currentClientVersion[0] === '0';
-                callback(betaFinished, isOnBeta);
+                // Duplicated code
+                let client = VersionCheck.client;
+                let param = 'min-' + client + '-version';
+                let minClientVersion = req.headers.get(param);
+                console.log("version client", client);
+                console.log("version param", param);
+                console.log("version minClientVersion", minClientVersion);
+
+                callback(minClientVersion);
             }
         });
     }

@@ -52,6 +52,7 @@ class HttpErrorHandler {
         } else {
             Rollbar[errorObj.level](errorObj);
         }
+        errorObj.sentToAnotherErrorHandler = true;
         return errorObj;
     };
 
