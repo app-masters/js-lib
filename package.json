@@ -39,5 +39,10 @@
     },
     "peerDependencies": {
         "moment": "*"
+    },
+    "jest": {
+        "globals": {
+            "__DEV__": true
+        }
     }
 }

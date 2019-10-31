@@ -159,7 +159,7 @@ class App extends Component {
         super();
         try {
             let callbacks = {
-                onMinVersionNotSatifies: (version) => {
+                onMinVersionNotSatisfies: (version) => {
                     alert("Você deve atualizar sua versão agora! Por favor recarregue a página, se a mensagem continuar, limpe o cache do navegador.");
                 },
                 onNewVersion: (version) => {

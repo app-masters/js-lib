@@ -8,17 +8,23 @@ import Notification from './notification';
 
 class AppBootstrap {
 
-    static setup(client, version, envs, storage, callback, customEnv) {
+    static setup(client, platform, version, envs, storage, callback, customEnv) {
 
         // Validate parans
         if (!client || ['web', 'mobile', 'admin'].indexOf(client) < 0)
-            throw ('Unrecognized or undefined client: ' + client);
+            throw ('AppBootstrap.setup - Unrecognized or undefined client: ' + client);
+        if (client === 'web' && platform !== 'web')
+            throw ('AppBootstrap.setup - Platform should be "web" when client is "web"');
+        if (!platform || ['web', 'android', 'ios'].indexOf(platform) < 0)
+            throw ('AppBootstrap.setup - Unrecognized or undefined platform: ' + platform + ' - should be one of: web, android, ios');
+        if (client === 'mobile' && ['android', 'ios'].indexOf(platform) < 0)
+            throw ('AppBootstrap.setup - Mobile platform should be one of: android, ios');
         if (typeof version === "object")
-            throw ('version param should be just a string, like "1.2.3"');
+            throw ('AppBootstrap.setup - Version param should be just a string, like "1.2.3"');
         // @todo Validate envs
         // @todo Validate storage
         if (!callback || !callback.onMinVersionNotSatifies || !callback.onNewVersion || !callback.onUncaughtError)
-            throw ('You must pass callback parameter to AppBootstrap.setup, with onMinVersionNotSatifies, onNewVersion and onUncaughtError methods.');
+            throw ('AppBootstrap.setup - You must pass callback parameter, with onMinVersionNotSatisfies, onNewVersion and onUncaughtError methods.');
         AppBootstrap.callbacks = callback;
 
         const logs = [];
@@ -35,9 +41,11 @@ class AppBootstrap {
         let buildTimeString;
         if (client !== 'mobile') {
             firebase = process.env.FIREBASE && process.env.FIREBASE === true;
-            buildTime = new Date(process.env.BUILD_TIME);
-            buildTimeString = buildTime.toDateString() + ' ' + buildTime.toTimeString();
-            logs.push('CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version + ' - RELEASE DATE: ' + process.env.APP_RELEASE + ' - BUILD_TIME: ' + buildTimeString + ' - FIREBASE: ' + firebase);
+            if (process.env.BUILD_TIME) {
+                buildTime = new Date(process.env.BUILD_TIME);
+                buildTimeString = buildTime.toDateString() + ' ' + buildTime.toTimeString();
+            }
+            logs.push('CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version + (process.env.APP_RELEASE ? ' - RELEASE DATE: ' + process.env.APP_RELEASE : '') + (buildTimeString ? ' - BUILD_TIME: ' + buildTimeString : '') + (firebase ? ' - FIREBASE: ' + firebase : ''));
         } else if (__DEV__ !== undefined) {
             logs.push('MOBILE CLIENT: ' + client + ' - ENV: ' + nodeEnv + ' - VERSION: ' + version);
         }
@@ -75,11 +83,11 @@ class AppBootstrap {
         HttpErrorHandler.setup(callback);
 
         // 4 -  Moment
-        moment.defineLocale('pt-br', require('moment/locale/pt-br'));
+        moment.updateLocale('pt-br', require('moment/locale/pt-br'));
 
         // 5 - Version Check
-        VersionCheck.setCurrentVersion(client, version);
-        VersionCheck.onMinVersionNotSatifies(Http, callback.onMinVersionNotSatifies);
+        VersionCheck.setCurrentVersion(client, platform, version);
+        VersionCheck.onMinVersionNotSatisfies(Http, callback.onMinVersionNotSatifies);
         VersionCheck.onNewVersion(storage).then(callback.onNewVersion);
 
         // // 6 - Capture errors onUncaught in AmActions

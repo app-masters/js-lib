@@ -3,16 +3,13 @@
 /*
  *  https://github.com/sunnylqm/react-native-storage/
  *  local storage(web/react native) wrapper
- *  sunnylqm 2017-04-20
- *  version 0.2.0
  */
 
 export default class FlexStorage {
-    constructor (options = {}) {
-        this._SIZE = options.size || 1000;   // maximum capacity
-        this.sync = options.sync || {};      // remote sync method
-        this.defaultExpires = options.defaultExpires !== undefined
-            ? options.defaultExpires : 1000 * 3600 * 24;
+    constructor(options = {}) {
+        this._SIZE = options.size || 1000; // maximum capacity
+        this.sync = options.sync || {}; // remote sync method
+        this.defaultExpires = options.defaultExpires !== undefined ? options.defaultExpires : 1000 * 3600 * 24;
         this.enableCache = options.enableCache !== false;
         this._s = options.storageBackend || null;
         this._innerVersion = 11;
@@ -33,57 +30,53 @@ export default class FlexStorage {
         }
 
         this._mapPromise = this.getItem('map').then(map => {
-            this._m = this._checkMap(map && JSON.parse(map) || {});
-            // delete this._mapPromise;
+            this._m = this._checkMap((map && JSON.parse(map)) || {});
         });
     }
-    clear () {
-        return this._s ? this.isPromise ? this._s.clear() : Promise.resolve(this._s.clear())
-        : Promise.resolve();
-    }
-    getItem (key) {
+    getItem(key) {
         return this._s
-            ? this.isPromise ? this._s.getItem(key) : Promise.resolve(this._s.getItem(key))
+            ? this.isPromise
+                ? this._s.getItem(key)
+                : Promise.resolve(this._s.getItem(key))
             : Promise.resolve();
     }
-    setItem (key, value) {
-        // console.log(Promise.resolve(this._s.setItem(key, value)));
-        // let aa = this._s.setItem(key, value);
-        // console.log (aa);
+    setItem(key, value) {
         return this._s
             ? this.isPromise
                 ? this._s.setItem(key, value)
                 : Promise.resolve(this._s.setItem(key, value))
             : Promise.resolve();
     }
-    removeItem (key) {
+    removeItem(key) {
         return this._s
-            ? this.isPromise ? this._s.removeItem(key) : Promise.resolve(this._s.removeItem(key))
+            ? this.isPromise
+                ? this._s.removeItem(key)
+                : Promise.resolve(this._s.removeItem(key))
             : Promise.resolve();
     }
-    _initMap () {
+    _initMap() {
         return {
             innerVersion: this._innerVersion,
             index: 0,
-            __keys__: {}
+            __keys__: {},
         };
     }
-    _checkMap (map) {
+    _checkMap(map) {
         if (map && map.innerVersion && map.innerVersion === this._innerVersion) {
             return map;
         } else {
             return this._initMap();
         }
     }
-    _getId (key, id) {
+    _getId(key, id) {
         return key + '_' + id;
     }
-    _saveToMap (params) {
+    _saveToMap(params) {
         let { key, id, data } = params,
             newId = this._getId(key, id),
             m = this._m;
         if (m[newId] !== undefined) {
-            // update existed data
+            // update existing data
             if (this.enableCache) this.cache[newId] = JSON.parse(data);
             return this.setItem('map_' + m[newId], data);
         }
@@ -114,10 +107,10 @@ export default class FlexStorage {
         this.setItem('map_' + currentIndex, data);
         this.setItem('map', JSON.stringify(m));
     }
-    save (params) {
+    save(params) {
         const { key, id, data, rawData, expires = this.defaultExpires } = params;
         if (key.toString().indexOf('_') !== -1) {
-            console.log('Please do not use "_" in key!');
+            console.error('Please do not use "_" in key!');
         }
         let dataToSave = { rawData: data };
         if (data === undefined) {
@@ -125,80 +118,81 @@ export default class FlexStorage {
                 console.warn('"rawData" is deprecated, please use "data" instead!');
                 dataToSave.rawData = rawData;
             } else {
-                console.log('"data" is required in save()!');
+                console.error('"data" is required in save()!');
                 return;
             }
         }
-        let now = new Date().getTime();
+        let now = Date.now();
         if (expires !== null) {
             dataToSave.expires = now + expires;
         }
         dataToSave = JSON.stringify(dataToSave);
-        // console.log(dataToSave);
         if (id === undefined) {
             if (this.enableCache) {
                 const cacheData = JSON.parse(dataToSave);
                 this.cache[key] = cacheData;
             }
-            // console.log(dataToSave);
             return this.setItem(key, dataToSave);
         } else {
             if (id.toString().indexOf('_') !== -1) {
                 console.error('Please do not use "_" in id!');
             }
-            return this._mapPromise.then(() => this._saveToMap({
+            return this._mapPromise.then(() =>
+                this._saveToMap({
+                    key,
+                    id,
+                    data: dataToSave,
+                }),
+            );
+        }
+    }
+    getBatchData(querys) {
+        return Promise.all(querys.map(query => this.load(query)));
+    }
+    async getBatchDataWithIds(params) {
+        let { key, ids, syncInBackground, syncParams } = params;
+        const tasks = ids.map(id =>
+            this.load({
                 key,
                 id,
-                data: dataToSave
-            }));
-        }
-    }
-    getBatchData (querys) {
-        let tasks = [];
-        for (let i = 0, query; query = querys[i]; i++) {
-            tasks[i] = this.load(query);
-        }
-        return Promise.all(tasks);
-    }
-    getBatchDataWithIds (params) {
-        let { key, ids, syncInBackground } = params;
-
-        return Promise.all(
-            ids.map((id) => this.load({ key, id, syncInBackground, autoSync: false, batched: true }))
-        ).then((results) => {
-            return new Promise((resolve, reject) => {
-                const ids = results.filter((value) => value.syncId !== undefined);
-                if (!ids.length) {
-                    return resolve();
-                }
-                return this.sync[key]({
-                    id: ids.map((value) => value.syncId),
-                    resolve,
-                    reject
-                });
-            }).then((data) => {
-                return results.map(value => {
-                    return value.syncId ? data.shift() : value;
-                });
-            });
+                syncInBackground,
+                autoSync: false,
+                batched: true,
+            }),
+        );
+        const results = await Promise.all(tasks);
+        const missingIds = [];
+        results.forEach(value => {
+            if (value.syncId !== undefined) {
+                missingIds.push(value.syncId);
+            }
         });
+        if (missingIds.length) {
+            const syncData = await this.sync[key]({
+                id: missingIds,
+                syncParams,
+            });
+            return results.map(value => {
+                return value.syncId ? syncData.shift() : value;
+            });
+        } else {
+            return results;
+        }
     }
-    _lookupGlobalItem (params) {
-        let ret;
-        let { key } = params;
+    _lookupGlobalItem(params) {
+        const { key } = params;
         if (this.enableCache && this.cache[key] !== undefined) {
-            ret = this.cache[key];
-            return this._loadGlobalItem({ ret, ...params });
+            return this._loadGlobalItem({ ret: this.cache[key], ...params });
         }
         return this.getItem(key).then(ret => this._loadGlobalItem({ ret, ...params }));
     }
-    _loadGlobalItem (params) {
+    _loadGlobalItem(params) {
         let { key, ret, autoSync, syncInBackground, syncParams } = params;
         if (ret === null || ret === undefined) {
             if (autoSync && this.sync[key]) {
-                return new Promise((resolve, reject) => this.sync[key]({ resolve, reject, syncParams }));
+                return this.sync[key]({ syncParams });
             }
-            return Promise.reject(new NotFoundError(JSON.stringify(params)));
+            throw new NotFoundError(JSON.stringify(params));
         }
         if (typeof ret === 'string') {
             ret = JSON.parse(ret);
@@ -206,30 +200,34 @@ export default class FlexStorage {
                 this.cache[key] = ret;
             }
         }
-        let now = new Date().getTime();
+        let now = Date.now();
         if (ret.expires < now) {
             if (autoSync && this.sync[key]) {
                 if (syncInBackground) {
-                    this.sync[key]({ syncParams });
-                    return Promise.resolve(ret.rawData);
+                    try {
+                        this.sync[key]({ syncParams, syncInBackground });
+                    } catch (e) {
+                        // avoid uncaught exception
+                    }
+                    return ret.rawData;
                 }
-                return new Promise((resolve, reject) => this.sync[key]({ resolve, reject, syncParams }));
+                return this.sync[key]({ syncParams, syncInBackground });
             }
-            return Promise.reject(new ExpiredError(JSON.stringify(params)));
+            throw new ExpiredError(JSON.stringify(params));
         }
-        return Promise.resolve(ret.rawData);
+        return ret.rawData;
     }
-    _noItemFound (params) {
+    _noItemFound(params) {
         let { key, id, autoSync, syncParams } = params;
         if (this.sync[key]) {
             if (autoSync) {
-                return new Promise((resolve, reject) => this.sync[key]({ id, syncParams, resolve, reject }));
+                return this.sync[key]({ id, syncParams });
             }
-            return Promise.resolve({ syncId: id });
+            return { syncId: id };
         }
-        return Promise.reject(new NotFoundError(JSON.stringify(params)));
+        throw new NotFoundError(JSON.stringify(params));
     }
-    _loadMapItem (params) {
+    _loadMapItem(params) {
         let { ret, key, id, autoSync, batched, syncInBackground, syncParams } = params;
         if (ret === null || ret === undefined) {
             return this._noItemFound(params);
@@ -242,37 +240,41 @@ export default class FlexStorage {
                 this.cache[newId] = ret;
             }
         }
-        let now = new Date().getTime();
+        let now = Date.now();
         if (ret.expires < now) {
             if (autoSync && this.sync[key]) {
                 if (syncInBackground) {
-                    this.sync[key]({ id, syncParams });
-                    return Promise.resolve(ret.rawData);
+                    try {
+                        this.sync[key]({ id, syncParams, syncInBackground });
+                    } catch (e) {
+                        // avoid uncaught exception
+                    }
+                    return ret.rawData;
                 }
-                return new Promise((resolve, reject) => this.sync[key]({ id, resolve, reject, syncParams }));
+                return this.sync[key]({ id, syncParams, syncInBackground });
             }
             if (batched) {
-                return Promise.resolve({ syncId: id });
+                return { syncId: id };
             }
-            return Promise.reject(new ExpiredError(JSON.stringify(params)));
+            throw new ExpiredError(JSON.stringify(params));
         }
-        return Promise.resolve(ret.rawData);
+        return ret.rawData;
     }
-    _lookUpInMap (params) {
-        let m = this._m,
-            ret;
-        let { key, id } = params;
-        let newId = this._getId(key, id);
+    _lookUpInMap(params) {
+        let ret;
+        const m = this._m;
+        const { key, id } = params;
+        const newId = this._getId(key, id);
         if (this.enableCache && this.cache[newId]) {
             ret = this.cache[newId];
-            return this._loadMapItem({ret, ...params });
+            return this._loadMapItem({ ret, ...params });
         }
         if (m[newId] !== undefined) {
-            return this.getItem('map_' + m[newId]).then(ret => this._loadMapItem({ret, ...params }));
+            return this.getItem('map_' + m[newId]).then(ret => this._loadMapItem({ ret, ...params }));
         }
-        return this._noItemFound({ret, ...params });
+        return this._noItemFound({ ret, ...params });
     }
-    remove (params) {
+    remove(params) {
         return this._mapPromise.then(() => {
             let m = this._m;
             let { key, id } = params;
@@ -285,7 +287,7 @@ export default class FlexStorage {
             }
             let newId = this._getId(key, id);
 
-            // remove existed data
+            // remove existing data
             if (m[newId] !== undefined) {
                 if (this.enableCache && this.cache[newId]) {
                     delete this.cache[newId];
@@ -298,46 +300,59 @@ export default class FlexStorage {
             }
         });
     }
-    _removeIdInKey (key, id) {
-        let indexTobeRemoved = (this._m.__keys__[key] || []).indexOf(id);
+    _removeIdInKey(key, id) {
+        const indexTobeRemoved = (this._m.__keys__[key] || []).indexOf(id);
         if (indexTobeRemoved !== -1) {
             this._m.__keys__[key].splice(indexTobeRemoved, 1);
         }
     }
-    load (params) {
-        let { key, id, autoSync = true, syncInBackground = true, syncParams } = params;
-        return this._mapPromise.then(() => new Promise((resolve, reject) => {
+    load(params) {
+        const { key, id, autoSync = true, syncInBackground = true, syncParams, batched } = params;
+        return this._mapPromise.then(() => {
             if (id === undefined) {
-                return resolve(this._lookupGlobalItem({
-                    key, resolve, reject, autoSync, syncInBackground, syncParams
-                }));
+                return this._lookupGlobalItem({
+                    key,
+                    autoSync,
+                    syncInBackground,
+                    syncParams,
+                });
+            } else {
+                return this._lookUpInMap({
+                    key,
+                    id,
+                    autoSync,
+                    syncInBackground,
+                    batched,
+                    syncParams,
+                });
             }
-            return resolve(this._lookUpInMap({
-                key, id, resolve, reject, autoSync, syncInBackground, syncParams
-            }));
-        }));
+        });
     }
-    clearMap () {
-        console.log('clearing...');
-        this.removeItem('map').then(() => {
+    clearAll() {
+        this._s.clear && this._s.clear();
+        this._m = this._initMap();
+    }
+    clearMap() {
+        return this.removeItem('map').then(() => {
+            this.cache = {};
             this._m = this._initMap();
         });
     }
-    clearMapForKey (key) {
+    clearMapForKey(key) {
         return this._mapPromise.then(() => {
             let tasks = (this._m.__keys__[key] || []).map(id => this.remove({ key, id }));
             return Promise.all(tasks);
         });
     }
-    getIdsForKey (key) {
+    getIdsForKey(key) {
         return this._mapPromise.then(() => {
             return this._m.__keys__[key] || [];
         });
     }
-    getAllDataForKey (key, options) {
+    getAllDataForKey(key, options) {
         options = Object.assign({ syncInBackground: true }, options);
         return this.getIdsForKey(key).then(ids => {
-            let querys = ids.map(id => ({ key, id, syncInBackground: options.syncInBackground }));
+            const querys = ids.map(id => ({ key, id, syncInBackground: options.syncInBackground }));
             return this.getBatchData(querys);
         });
     }

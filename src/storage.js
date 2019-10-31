@@ -55,6 +55,8 @@ class AMStorage {
             this.amStorage.save({key: key, data: value}).then(data => {
                 // console.log("shit!",data);
                 fulfill(value);
+            }).catch(err => {
+                reject(err);
             });
         });
     }
@@ -78,6 +80,8 @@ class AMStorage {
             this.amStorage.removeItem(key).then(data => {
                 console.log('removeItem', data);
                 fulfill(data);
+            }).catch(err => {
+                reject(err);
             });
         });
     }
