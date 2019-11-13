@@ -25,9 +25,11 @@ export default class VersionCheck {
         }
 
         // Check Client version
+        let minClientVersionSatisfies = true;
         let param = 'min-' + client + '-version';
         let minClientVersion = req.headers.get(param);
-        let minClientVersionSatisfies = this.actualVersionSatisfies(minClientVersion, param, req);
+        if (minClientVersion)
+            minClientVersionSatisfies = this.actualVersionSatisfies(minClientVersion, param, req);
 
         // Check platform (ios/android) version
         let minPlatformVersionSatisfies = true;
