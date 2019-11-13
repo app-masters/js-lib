@@ -1,7 +1,7 @@
 import HttpErrorHandler from './httpErrorHandler';
 
 class Http {
-    static setup (version, client, env, contentType) {
+    static setup (version, client, env, contentType, callback) {
         let headers = {};
         headers['Content-Type'] = contentType;
         headers['Accept'] = contentType;
@@ -10,6 +10,8 @@ class Http {
         headers[client + '-version'] = version;
         Http.defaultHeaders = headers;
         Http.headers = headers;
+        if (Http.errorHandler === HttpErrorHandler)
+            HttpErrorHandler.setup(callback);
     }
 
     static reset () {
@@ -210,8 +212,9 @@ class Http {
         Http.requestListener = callback;
     }
 
-    static setErrorHandler (ErrorHandlerClass) {
+    static setErrorHandler (ErrorHandlerClass, callbacks) {
         Http.errorHandler = ErrorHandlerClass;
+        ErrorHandlerClass.setup(callbacks);
     }
 }
 

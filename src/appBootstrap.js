@@ -79,8 +79,7 @@ class AppBootstrap {
 
         // 3 - Http
         Http.setBaseURL(config.baseUrl);
-        Http.setup(version, client, nodeEnv, 'application/json');
-        HttpErrorHandler.setup(callback);
+        Http.setup(version, client, nodeEnv, 'application/json', callback);
 
         // 4 -  Moment
         moment.updateLocale('pt-br', require('moment/locale/pt-br'));
