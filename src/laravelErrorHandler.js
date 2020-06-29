@@ -18,10 +18,10 @@ class LaravelErrorHandler {
      * @param error
      * @param method
      * @param url
-     * @param body
+     * @param sentBody
      * @returns {*}
      */
-    static handle (error, method, url, body) {
+    static handle (error, method, url, sentBody) {
         // Decorate error object
         if (error.status === 405 || error.status >= 500){
             // Server error, don't show original - 405 or 5XX
@@ -42,7 +42,7 @@ class LaravelErrorHandler {
         }
         error.method = method;
         error.url = url;
-        error.body = body;
+        error.sentBody = sentBody;
 
         // error.level !== 'user'
         // Handle error
