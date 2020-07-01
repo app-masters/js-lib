@@ -37,12 +37,17 @@ class LaravelErrorHandler {
             error.level = 'user'; // User error, don't send to Rollbar
         } else {
             // Another error (can be a error without status code)
-            error.body = {error: [error.remote]};
+            error.body = {error: [error.remote || error.message]};
             error.level = 'error';
         }
+        // Http info
         error.method = method;
         error.url = url;
         error.sentBody = sentBody;
+
+        if (error.message) {
+            error.originalMessage = error.message;
+        }
 
         // error.level !== 'user'
         // Handle error
@@ -53,11 +58,11 @@ class LaravelErrorHandler {
         const handler = errorLibrary[error.name]; // error.name will work with laravel?
         if (handler) {
             if (handler.message) {
-                errorObj.message = handler.message;
+                error.message = handler.message;
             }
             if (handler.callback && LaravelErrorHandler.callback[handler.callback]) {
                 LaravelErrorHandler.callback[handler.callback](error);
-                errorObj.sentToAnotherErrorHandler = true;
+                error.sentToAnotherErrorHandler = true;
             }
             if (handler.level === null) {
                 return error;
