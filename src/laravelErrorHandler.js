@@ -52,7 +52,10 @@ class LaravelErrorHandler {
         // error.level !== 'user'
         // Handle error
         console.log("LaravelErrorHandler.handle", error.name, error.status);
-        if (!error.name){
+        const statusCode = error.status ? String(error.status) : undefined;
+        const errorName = error.name || statusCode;
+
+        if (!errorName){
             console.error("No error.name on LaravelErrorHandler.handle - error object:", error);
         }
         const handler = errorLibrary[error.name]; // error.name will work with laravel?
