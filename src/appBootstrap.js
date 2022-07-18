@@ -59,9 +59,11 @@ class AppBootstrap {
         }
 
         console.log(logs);
-        console.log('Loaded config', config);
-        if (config === undefined) {
-            throw new Error('No config for NODE_ENV "' + nodeEnv + '"');
+        if (nodeEnv === 'development') {
+            console.log('Loaded config', config);
+            if (config === undefined) {
+                throw new Error('No config for NODE_ENV "' + nodeEnv + '"');
+            }
         }
         AppBootstrap.config = config;
 
