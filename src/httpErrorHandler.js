@@ -2,7 +2,7 @@ import Rollbar from './rollbar';
 
 class HttpErrorHandler {
     static setup (callback) {
-        console.log("HttpErrorHandler - setup");
+        // console.log("HttpErrorHandler - setup");
         // More callbacks can be added if necessary in the future
         if (!callback || !callback.onConnectionFail || !callback.onAPIFail) {
             console.warn('You must pass callback parameter to AppBootstrap.setup, with onConnectionFail and onAPIFail methods.');
